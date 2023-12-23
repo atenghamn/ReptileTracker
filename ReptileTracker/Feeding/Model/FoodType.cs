@@ -4,5 +4,9 @@ public enum FoodType
 {
     CRICKET,
     MEALWORM,
-    ZOPHOBAS
+    ZOPHOBAS,
+    PINKIES,
+    VEGETABLES,
+    FRUIT,
+    OTHER
 }
