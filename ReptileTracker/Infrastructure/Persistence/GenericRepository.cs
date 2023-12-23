@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ReptileTracker.Db;
+using ReptileTracker.EntityFramework;
 
 namespace ReptileTracker.Infrastructure.Persistence;
 

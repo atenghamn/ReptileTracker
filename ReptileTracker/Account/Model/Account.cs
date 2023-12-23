@@ -10,7 +10,7 @@ public class Account
     [Column("id")]
     [Required]
     [Key]
-    public int Id;   
+    public int Id { get; set; } 
     
     [Required]
     [StringLength(20)]

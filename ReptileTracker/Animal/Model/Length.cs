@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ReptileTracker.Animal.Model;
 
 [Table("length", Schema = "dbo")]
-
 public class Length
 {
     [Column("id")]

@@ -3,7 +3,7 @@ using ReptileTracker.Animal.Model;
 using ReptileTracker.Feeding.Model;
 using ReptileTracker.Shedding.Model;
 
-namespace ReptileTracker.Db;
+namespace ReptileTracker.EntityFramework;
 
 public class ReptileContext(IConfiguration configuration) : DbContext
 {
