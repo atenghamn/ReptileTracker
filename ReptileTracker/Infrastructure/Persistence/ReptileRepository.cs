@@ -1,9 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ReptileTracker.Animal.Model;
-using ReptileTracker.Db;
+using ReptileTracker.EntityFramework;
 
 namespace ReptileTracker.Infrastructure.Persistence;
-
 public class ReptileRepository(ReptileContext context) : GenericRepository<Reptile>(context), IReptileRepository
 {
     public async Task<IEnumerable<Reptile?>> GetByAccount(int accountId)
