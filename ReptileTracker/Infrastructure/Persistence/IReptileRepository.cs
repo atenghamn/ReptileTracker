@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ReptileTracker.Animal.Model;
 
 namespace ReptileTracker.Infrastructure.Persistence;

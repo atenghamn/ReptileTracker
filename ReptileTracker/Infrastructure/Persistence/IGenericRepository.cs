@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace ReptileTracker.Infrastructure.Persistence;
 
 public interface IGenericRepository<TEntity> where TEntity : class
