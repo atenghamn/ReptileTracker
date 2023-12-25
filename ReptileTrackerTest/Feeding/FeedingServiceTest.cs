@@ -1,5 +1,6 @@
 using NSubstitute;
 using NUnit.Framework.Internal;
+using ReptileTracker.Commons;
 using ReptileTracker.Feeding.Model;
 using ReptileTracker.Feeding.Service;
 using ReptileTracker.Infrastructure.Persistence;
@@ -31,10 +32,13 @@ public class FeedingServiceTest
     }
     
     [Test]
-    public void WhenFeedingEventOccurs_WithCorrectValues_ReturnFeedingSummary()
+    public void WhenFeedingEventOccurs_WithCorrectValues_ReturnSuccessResult()
     {
         var result = _feedingService.AddFeedingEvent(_feedingEvent);
-        
-        Assert.That(result, Is.EqualTo(_feedingEvent));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.EqualTo(true));
+            Assert.That(result.Error, Is.EqualTo(Error.None));
+        });
     }
 }
