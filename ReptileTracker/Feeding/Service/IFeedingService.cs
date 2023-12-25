@@ -5,5 +5,7 @@ namespace ReptileTracker.Feeding.Service;
 
 public interface IFeedingService
 {
-    Result AddFeedingEvent(FeedingEvent feedingEvent);
+    Result<FeedingEvent> AddFeedingEvent(FeedingEvent feedingEvent);
+    Result<FeedingEvent> GetFeedingEventById(int feedingEventId);
+    Result<FeedingEvent> DeleteFeedingEvent(int feedingEventId);
 }

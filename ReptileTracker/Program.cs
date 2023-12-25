@@ -43,9 +43,7 @@ app.MapPost("reptile/feeding", (FeedingEvent feedingEvent, IFeedingService feedi
 {
     var result = feedingService.AddFeedingEvent(feedingEvent);
 
-    return result.Match(
-        onSuccess: Results.NoContent, 
-        onFailure: Results.BadRequest);
+    return result.IsFailure ? Results.BadRequest() : Results.NoContent();
 });
 
 app.Run();
