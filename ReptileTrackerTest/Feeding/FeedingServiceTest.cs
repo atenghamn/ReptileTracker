@@ -87,4 +87,72 @@ public class FeedingServiceTest
             Assert.That(result.Error, Is.EqualTo(FeedingErrors.NotFound));
         });
     }
+
+    [Test]
+    public void UpdateExistingFeedingEvent_ReturnsSuccess()
+    {
+        var result = _feedingService.UpdateFeedingEvent(_feedingEvent);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.EqualTo(true));
+            Assert.That(result.Data, Is.EqualTo(_feedingEvent));
+        });
+    }
+
+    [Test]
+    public void UpdateNonExistingFeedingEvent_ReturnsError()
+    {
+        var result = _feedingService.UpdateFeedingEvent(null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.EqualTo(false));
+            Assert.That(result.Error, Is.EqualTo(FeedingErrors.CantUpdate));
+        });
+    }
+
+    [Test]
+    public void GetFeedingEvents_WithValidData_ReturnsSuccess()
+    {
+        var feedingEvents = new List<FeedingEvent>()
+        {
+            new FeedingEvent()
+            {
+                Id = 1,
+                ReptileId = 1,
+                Date = DateTime.Now,
+                Amount = 10,
+                FoodType = FoodType.CRICKET,
+                Notes = "Feeding notes"
+            },
+            new FeedingEvent()
+            {
+                Id = 2,
+                ReptileId = 2,
+                Date = DateTime.Now.AddDays(-1),
+                Amount = 5,
+                FoodType = FoodType.MEALWORM,
+                Notes = "Another feeding event"
+            }
+        };
+        _mockedFeedingRepository.GetAll().Returns(feedingEvents);
+        
+        var result = _feedingService.GetFeedingEvents();
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.EqualTo(true));
+            Assert.That(result.Error, Is.EqualTo(Error.None));
+            Assert.That(result.Data, Is.EqualTo(feedingEvents));
+        });
+    }
+
+    [Test]
+    public void GetFeedingEvents_WithInvalidData_ReturnsError()
+    {
+        var result = _feedingService.GetFeedingEvents();
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsFailure, Is.EqualTo(true));
+            Assert.That(result.Error, Is.EqualTo(FeedingErrors.NoFeedingHistory));
+        });
+    }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ReptileTracker.Commons;
 
@@ -24,12 +25,13 @@ public class Result<T> where T : new()
         }
         
         IsSuccess = isSuccess;
-        Error = error;    }
+        Error = error;    
+    }
 
     public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;
     public Error Error { get; }
-    public T? Data { get; set; }
+    public T? Data { get; }
     public static Result<T> Success(T entity) => new Result<T>(true, Error.None, entity);
     public static Result<T> Success() => new Result<T>(true, Error.None);
     public static Result<T> Failure(Error error) => new Result<T>(false, error);
