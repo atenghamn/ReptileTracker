@@ -50,7 +50,7 @@ public class WeightServiceTests
     }
     
     [Test]
-    public void AddSheddingEvent_ShouldReturnSuccessResult_WhenValidSheddingEventIsProvided()
+    public void AddWeightEvent_ShouldReturnSuccessResult_WhenValidWeightEventIsProvided()
     {
         _mockedWeigthRepository.Add(_weigth).Returns(_weigth);
         var result = _weightService.AddWeight(_weigth);
@@ -113,7 +113,7 @@ public class WeightServiceTests
     }
 
     [Test]
-    public void GetSheddingEvents_WithValidData_ReturnsSuccess()
+    public void GetWeigthEvents_WithValidData_ReturnsSuccess()
     {
         var weigthEvents = new[]
         {
@@ -133,7 +133,7 @@ public class WeightServiceTests
     }
 
     [Test]
-    public void GetSheddingEvents_WithInvalidData_ReturnsError()
+    public void GetWeightEvents_WithInvalidData_ReturnsError()
     {
         var emptyWeigthEvents = new List<Weight>();
         _mockedWeigthRepository.GetAll().Returns(emptyWeigthEvents);

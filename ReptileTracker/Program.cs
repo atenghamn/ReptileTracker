@@ -3,10 +3,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ReptileTracker.Animal.Facade;
+using ReptileTracker.Animal.Model;
+using ReptileTracker.Animal.Service;
 using ReptileTracker.EntityFramework;
 using ReptileTracker.Feeding.Model;
 using ReptileTracker.Feeding.Service;
 using ReptileTracker.Infrastructure.Persistence;
+using ReptileTracker.Shedding.Model;
+using ReptileTracker.Shedding.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +28,16 @@ builder.Services.AddDbContext<ReptileContext>();
 
 builder.Services.AddScoped<IFeedingService, FeedingService>();
 builder.Services.AddScoped(typeof(IGenericRepository<FeedingEvent>), typeof(GenericRepository<FeedingEvent>));
+builder.Services.AddScoped<ISheddingService, SheddingService > ();
+builder.Services.AddScoped(typeof(IGenericRepository<SheddingEvent>), typeof(GenericRepository<SheddingEvent>));
+builder.Services.AddScoped<ILengthService, LengthService>();
+builder.Services.AddScoped<IWeightService, WeightService>();
+builder.Services.AddScoped<IReptileService, ReptileService>();
+builder.Services.AddScoped(typeof(IGenericRepository<Weight>), typeof(GenericRepository<Weight>));
+builder.Services.AddScoped(typeof(IGenericRepository<Length>), typeof(GenericRepository<Length>));
+builder.Services.AddScoped(typeof(IGenericRepository<Reptile>), typeof(GenericRepository<Reptile>));
+builder.Services.AddScoped<IReptileFacade, ReptileFacade>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

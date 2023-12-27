@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReptileTracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ba7156e9ee398565ae8418bb53382f4bc629fbf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb8b7e9aaef9d77b9c5078cbf6097ee5ac82d872")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReptileTracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReptileTracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
