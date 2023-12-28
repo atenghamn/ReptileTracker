@@ -1,33 +1,33 @@
+using System;
+using System.Collections.Generic;
+using ReptileTracker.Animal.Model;
+using ReptileTracker.Commons;
+using ReptileTracker.Feeding.Model;
+using ReptileTracker.Shedding.Model;
+
 namespace ReptileTracker.Animal.Facade;
 
-public class IReptileFacade
+public interface IReptileFacade
 {
-    // Create a new reptile
-    // Update an exissting reptile
-    // Delete an existing reptile 
-    // Show information about a reptile 
-    
-    // Add weight event to reptile
-    // Remove wiehgt event to reptile
-    // Update weight event to reptile 
-    // Get one weight event to reptile
-    // Get all weight events to reptile
-    
-    // Add lenght measurement to reptile
-    // Remove legnth measurement to reptile
-    // Update lenght measurement to reptile
-    // Get one length measurement to reptile
-    // Get all length measurement to reptile
-    
-    // Add shedding event to reptile 
-    // Remove shedding event to reptile
-    // Update shedding event to reptile
-    // Get one shedding event to reptile
-    // Get all shedding evenet to reptile
-    
-    // Add feeding event to reptile
-    // Remove feeding event to reptile
-    // Update feeding event to reptile
-    // Get one feeding event to reptile
-    // Get all feeding evenet to reptile
+    Result<Reptile> AddNewReptile(int accountId, string reptileName, string species, DateTime birthdate,
+        ReptileType type);
+    Result<Reptile> UpdateReptile(int accountId, Reptile entity);
+    Result<Reptile> DeleteReptile(int accountId, int reptileId);
+    Result<Reptile> GetFullReptileInfo(int accountId, int reptileId);
+
+    Result<Reptile> AddNewMeasurement(int accountId, int reptileId, Weight? weight = null, Length? length = null);
+    Result<Reptile> UpdateMeasurement(int accountId, int reptileId, Weight? weight = null, Length? length = null);
+    Result<Reptile> DeleteMeasurement(int accountId, int reptileId, int weightId, int lengthId);
+
+    Result<SheddingEvent> AddSheddingEvent(int accountId, int reptileId, SheddingEvent sheddingEvent);
+    Result<SheddingEvent> UpdateSheddingEvent(int accountId, int reptileId, SheddingEvent sheddingEvent);
+    Result<Reptile> DeleteSheddingEvent(int accountId, int reptileId, int sheddingEventId);
+    Result<SheddingEvent> GetSheddingEvent(int accountId, int reptileId, int sheddingEventId);
+    Result<List<SheddingEvent>> GetAllSheddingEventsForReptile(int accountId, int reptileId);
+
+    Result<FeedingEvent> AddFeedingEvent(int accountId, int reptileId, FeedingEvent feedingEvent);
+    Result<FeedingEvent> UpdateFeedingEvent(int accountId, int reptileId, FeedingEvent feedingEvent);
+    Result<FeedingEvent> DeleteFeedingEvent(int accountId, int reptileId, int feedingEventId);
+    Result<FeedingEvent> GetFeedingEvent(int accountId, int reptileId, int feedingEventId);
+    Result<List<FeedingEvent>> GetAllFeedingEventsForReptile(int accountId, int reptileId);
 }
