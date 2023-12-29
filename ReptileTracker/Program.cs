@@ -12,6 +12,8 @@ using ReptileTracker.Feeding.Service;
 using ReptileTracker.Infrastructure.Persistence;
 using ReptileTracker.Shedding.Model;
 using ReptileTracker.Shedding.Service;
+using Serilog;
+using Serilog.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,5 +61,10 @@ app.MapPost("reptile/feeding", (FeedingEvent feedingEvent, IFeedingService feedi
 
     return result.IsFailure ? Results.BadRequest() : Results.NoContent();
 });
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .MinimumLevel.Information()
+    .CreateLogger();
 
 app.Run();

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IQDyk07c+N4yIg73f06QXW8TSxQC3e7ZzZrmb/+XUPWiqTORMY1np/uZgtsm4HE9XSKFZts7qLCgndfGB4aC5w==",
+  "dgSpecHash": "9E8mzb8lf/xibSFj6ygS4FnwFD9emY7x31SgjxlG10+WnjO5ypvWFIsZ+Xyqzvz+fyW6HbRVUwxlMhi6gWV3Cg==",
   "success": true,
   "projectFilePath": "/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTrackerTests/ReptileTrackerTests.csproj",
   "expectedPackageFiles": [
@@ -51,6 +51,8 @@
     "/home/atenghamn/.nuget/packages/nunit/3.13.3/nunit.3.13.3.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/nunit.analyzers/3.6.1/nunit.analyzers.3.6.1.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/nunit3testadapter/4.2.1/nunit3testadapter.4.2.1.nupkg.sha512",
+    "/home/atenghamn/.nuget/packages/serilog/3.1.1/serilog.3.1.1.nupkg.sha512",
+    "/home/atenghamn/.nuget/packages/serilog.sinks.console/5.0.1/serilog.sinks.console.5.0.1.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
