@@ -9,21 +9,21 @@ using Serilog;
 
 namespace ReptileTracker.Shedding.Service;
 
-public sealed class SheddingService(IGenericRepository<SheddingEvent> sheddingRepository) : ISheddingService
+public sealed class SheddingService(ISheddingRepository sheddingRepository) : ISheddingService
 {
 
-    public Result<SheddingEvent> AddSheddingEvent(SheddingEvent SheddingEvent)
+    public Result<SheddingEvent> AddSheddingEvent(SheddingEvent sheddingEvent)
     {
         try
         {
-            sheddingRepository.Add(SheddingEvent);
+            sheddingRepository.Add(sheddingEvent);
             sheddingRepository.Save();
-            Log.Logger.Debug("Added shedding event to reptile {ReptileId}",SheddingEvent.ReptileId);
-            return Result<SheddingEvent>.Success(SheddingEvent);
+            Log.Logger.Debug("Added shedding event to reptile {ReptileId}",sheddingEvent.ReptileId);
+            return Result<SheddingEvent>.Success(sheddingEvent);
         }
         catch (Exception ex)
         {
-            Log.Logger.Error("Failed to add shedding event to reptile {ReptileId}", SheddingEvent.ReptileId);
+            Log.Logger.Error("Failed to add shedding event to reptile {ReptileId}", sheddingEvent.ReptileId);
             return Result<SheddingEvent>.Failure(SheddingErrors.CantSave);
         }
     }
@@ -72,11 +72,11 @@ public sealed class SheddingService(IGenericRepository<SheddingEvent> sheddingRe
         }
     }
 
-    public Result<List<SheddingEvent>> GetSheddingEvents()
+    public Result<List<SheddingEvent>> GetSheddingEvents(int reptileId)
     {
         try
         {
-            var entities = sheddingRepository.GetAll();
+            var entities = sheddingRepository.GetAllForReptile(reptileId).Result;
             var list = entities.ToList();
             return list.Count < 1
                 ? Result<List<SheddingEvent>>.Failure(SheddingErrors.EventlistNotFound)

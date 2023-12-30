@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
 
@@ -10,4 +12,5 @@ public interface IReptileService
     Result<Reptile> UpdateReptile(Reptile entity);
     Result<Reptile> GetReptileById(int id);
     Result<Reptile> DeleteReptile(int id);
+    Task<Result<List<Reptile>>> GetReptilesByAccount(int id);
 }

@@ -5,14 +5,14 @@ using ReptileTracker.Feeding.Model;
 using ReptileTracker.Feeding.Service;
 using ReptileTracker.Infrastructure.Persistence;
 
-namespace ReptileTrackerTest.Feeding;
+namespace ReptileTrackerTests.Feeding.Service;
 
 [TestFixture]
 public class FeedingServiceTest
 {
 
     private IFeedingService _feedingService;
-    private IGenericRepository<FeedingEvent> _mockedFeedingRepository = Substitute.For<IGenericRepository<FeedingEvent>>();
+    private IFeedingRepository _mockedFeedingRepository = Substitute.For<IFeedingRepository>();
     private FeedingEvent _feedingEvent;
 
     [SetUp]
@@ -134,9 +134,9 @@ public class FeedingServiceTest
                 Notes = "Another feeding event"
             }
         };
-        _mockedFeedingRepository.GetAll().Returns(feedingEvents);
+        _mockedFeedingRepository.GetAllForReptile(1).Returns(feedingEvents);
 
-        var result = _feedingService.GetFeedingEvents();
+        var result = _feedingService.GetFeedingEvents(1);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -148,11 +148,11 @@ public class FeedingServiceTest
     [Test]
     public void GetFeedingEvents_WithInvalidData_ReturnsError()
     {
-        var result = _feedingService.GetFeedingEvents();
+        var result = _feedingService.GetFeedingEvents(2);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
-            Assert.That(result.Error, Is.EqualTo(FeedingErrors.NoFeedingHistory));
+            Assert.That(result.Error, Is.EqualTo(FeedingErrors.EventlistNotFound));
         });
     }
 }

@@ -14,7 +14,7 @@ namespace ReptileTrackerTests.Animal.Service;
 public class ReptileServiceTests
 {
     private IReptileService _reptileService;
-    private IGenericRepository<Reptile> _moockedReptileRepository = Substitute.For<IGenericRepository<Reptile>>();
+    private IReptileRepository _moockedReptileRepository = Substitute.For<IReptileRepository>();
     private Reptile _reptile;
 
     [SetUp]
@@ -170,4 +170,57 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
         });
     }
 
+    [Test]
+    public void GetReptilesByAccount_GivenValidId_ReturnListOfReptiles()
+    {
+        var reptiles = new List<Reptile>()
+        {
+            new Reptile()
+            {
+                AccountId = 1,
+                ReptileType = ReptileType.CROCODILIAN,
+                Name = "Godzilla",
+                Birthdate = new DateTime(2023, 11, 25),
+                Species = "Alligtor",
+                MeasurmentHistory = new List<Length>(),
+                WeightHistory = new List<Weight>(),
+                FeedingHistory = new List<FeedingEvent>(),
+                SheddingHistory = new List<SheddingEvent>(),
+            },
+            new Reptile()
+            {
+                AccountId = 1,
+                ReptileType = ReptileType.CROCODILIAN,
+                Name = "Bridezilla",
+                Birthdate = new DateTime(2023, 11, 25),
+                Species = "Alligtor",
+                MeasurmentHistory = new List<Length>(),
+                WeightHistory = new List<Weight>(),
+                FeedingHistory = new List<FeedingEvent>(),
+                SheddingHistory = new List<SheddingEvent>(),
+            }
+        };
+
+        _moockedReptileRepository.GetByAccount(1).Returns(reptiles);
+
+        var result = _reptileService.GetReptilesByAccount(1).Result;
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.EqualTo(true));
+            Assert.That(result.Error, Is.EqualTo(Error.None));
+            Assert.That(result.Data, Is.EqualTo(reptiles));
+        });
+    }
+
+    [Test]
+    public void GetReptilesByAccount_WithInvalidId_ReturnsError()
+    {
+        _moockedReptileRepository.GetByAccount(2).Returns((Task<IEnumerable<Reptile?>>)null);
+        var result = _reptileService.GetReptilesByAccount(2).Result;
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsFailure, Is.EqualTo(true));
+            Assert.That(result.Error, Is.EqualTo(ReptileErrors.NotFound));
+        });
+    }
 }

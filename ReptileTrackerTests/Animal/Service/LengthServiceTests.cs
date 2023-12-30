@@ -11,7 +11,7 @@ namespace ReptileTrackerTests.Animal.Service;
 public class LengthServiceTests
 {
     private ILengthService _lengthService;
-    private IGenericRepository<Length> _mockedLengthRepository = Substitute.For<IGenericRepository<Length>>();
+    private ILengthRepository _mockedLengthRepository = Substitute.For<ILengthRepository>();
     private Length _length;
 
     [SetUp]
@@ -115,14 +115,14 @@ public class LengthServiceTests
     [Test]
     public void GetSheddingEvents_WithValidData_ReturnsSuccess()
     {
-        var lengthEvents = new[]
+        var lengthEvents = new List<Length>()
         {
             new Length { Id = 1, ReptileId = 1, Measure = 10, MeasurementDate = DateTime.Now },
             new Length { Id = 2, ReptileId = 1, Measure = 20, MeasurementDate = DateTime.Now },
             new Length { Id = 3, ReptileId = 1, Measure = 30, MeasurementDate = DateTime.Now }
         };
-        _mockedLengthRepository.GetAll().Returns(lengthEvents);
-        var result = _lengthService.GetLengths();
+        _mockedLengthRepository.GetAllForReptile(1).Returns(lengthEvents);
+        var result = _lengthService.GetLengths(1).Result;
         
         Assert.Multiple(() =>
         {
@@ -137,11 +137,11 @@ public class LengthServiceTests
     {
         var emptyLengthEvents = new List<Length>();
         _mockedLengthRepository.GetAll().Returns(emptyLengthEvents);
-        var result = _lengthService.GetLengths();
+        var result = _lengthService.GetLengths(2).Result;
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
-            Assert.That(result.Error, Is.EqualTo(LengthErrors.NoLengthHistory));
+            Assert.That(result.Error, Is.EqualTo(LengthErrors.EventlistNotFound));
         });
     }
 }

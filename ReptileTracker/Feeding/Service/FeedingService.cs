@@ -10,7 +10,7 @@ using Serilog.Core;
 
 namespace ReptileTracker.Feeding.Service;
 
-public sealed class FeedingService(IGenericRepository<FeedingEvent> feedingRepository) : IFeedingService
+public sealed class FeedingService(IFeedingRepository feedingRepository) : IFeedingService
 {
     public Result<FeedingEvent> GetFeedingEventById(int feedingId)
     {
@@ -72,11 +72,11 @@ public sealed class FeedingService(IGenericRepository<FeedingEvent> feedingRepos
         }
     }
 
-    public Result<List<FeedingEvent>> GetFeedingEvents()
+    public Result<List<FeedingEvent>> GetFeedingEvents(int repitleId)
     {
         try
         {
-            var entities = feedingRepository.GetAll();
+            var entities = feedingRepository.GetAllForReptile(repitleId).Result;
             var list = entities.ToList();
             return list.Count < 1 ? Result<List<FeedingEvent>>.Failure(FeedingErrors.NoFeedingHistory) : Result<List<FeedingEvent>>.Success(list);
         }

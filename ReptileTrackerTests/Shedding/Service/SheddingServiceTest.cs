@@ -2,6 +2,7 @@ using System.Runtime.InteropServices.JavaScript;
 using NSubstitute;
 using NuGet.Frameworks;
 using ReptileTracker.Commons;
+using ReptileTracker.EntityFramework;
 using ReptileTracker.Infrastructure.Persistence;
 using ReptileTracker.Shedding.Errors;
 using ReptileTracker.Shedding.Model;
@@ -13,9 +14,8 @@ namespace ReptileTrackerTests.Shedding.Service;
 public class SheddingServiceTest
 {
     private ISheddingService _sheddingService;
-
-    private IGenericRepository<SheddingEvent> _mockedSheddingRepository =
-        Substitute.For<IGenericRepository<SheddingEvent>>();
+    private ISheddingRepository _mockedSheddingRepository =
+        Substitute.For<ISheddingRepository>();
 
     private SheddingEvent _sheddingEvent;
 
@@ -147,8 +147,8 @@ public class SheddingServiceTest
                 Date = DateTime.Now, 
                 Notes = "Shedding event 3"
             } };
-        _mockedSheddingRepository.GetAll().Returns(sheddingEvents);
-        var result = _sheddingService.GetSheddingEvents();
+        _mockedSheddingRepository.GetAllForReptile(1).Returns(sheddingEvents);
+        var result = _sheddingService.GetSheddingEvents(1);
         
         Assert.Multiple(() =>
         {
@@ -162,8 +162,8 @@ public class SheddingServiceTest
     public void GetSheddingEvents_WithInvalidData_ReturnsError()
     {
         var emptySheddingEvents = new List<SheddingEvent>();
-        _mockedSheddingRepository.GetAll().Returns(emptySheddingEvents);
-        var result = _sheddingService.GetSheddingEvents();
+        _mockedSheddingRepository.GetAllForReptile(2).Returns(emptySheddingEvents);
+        var result = _sheddingService.GetSheddingEvents(1);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ReptileTracker.Animal.Errors;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
@@ -10,7 +11,7 @@ using Serilog.Core;
 
 namespace ReptileTracker.Animal.Service;
 
-public class LengthService(IGenericRepository<Length> lengthRepository) : ILengthService
+public sealed class LengthService(ILengthRepository lengthRepository) : ILengthService
 {
     public Result<Length> AddLength(Length length)
     {
@@ -72,11 +73,11 @@ public class LengthService(IGenericRepository<Length> lengthRepository) : ILengt
         }
     }
 
-    public Result<List<Length>> GetLengths()
+    public async Task<Result<List<Length>>> GetLengths(int reptileId)
     {
         try
         {
-            var entities = lengthRepository.GetAll();
+            var entities = lengthRepository.GetAllForReptile(reptileId).Result;
             var list = entities.ToList();
             return list.Count < 1 ? Result<List<Length>>.Failure(LengthErrors.NoLengthHistory) : Result<List<Length>>.Success(list);
         }
