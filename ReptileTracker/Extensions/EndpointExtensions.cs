@@ -1,6 +1,6 @@
 namespace ReptileTracker.Extensions;
 
-public class WebApplicationExtensions
+public static class EndpointExtensions
 {
     
 }
