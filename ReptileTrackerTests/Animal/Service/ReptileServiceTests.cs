@@ -18,7 +18,7 @@ public class ReptileServiceTests
     private Reptile _reptile;
 
     [SetUp]
-    public void SetUo()
+    public void SetUp()
     {
         Account testAccount = new Account()
         {
@@ -85,7 +85,8 @@ public class ReptileServiceTests
             name: "Red", 
             species: "Blood Python", 
             birthdate: DateTime.Now, 
-            type: ReptileType.SNAKE);
+            type: ReptileType.SNAKE,
+            accountId: 1);
         
         Assert.Multiple(() =>
         {

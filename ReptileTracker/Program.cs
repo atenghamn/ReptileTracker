@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ReptileTracker.Animal.Facade;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Animal.Service;
 using ReptileTracker.EntityFramework;
@@ -38,7 +37,6 @@ builder.Services.AddScoped<IReptileService, ReptileService>();
 builder.Services.AddScoped(typeof(IGenericRepository<Weight>), typeof(GenericRepository<Weight>));
 builder.Services.AddScoped(typeof(IGenericRepository<Length>), typeof(GenericRepository<Length>));
 builder.Services.AddScoped(typeof(IGenericRepository<Reptile>), typeof(GenericRepository<Reptile>));
-builder.Services.AddScoped<IReptileFacade, ReptileFacade>();
 
 var app = builder.Build();
 

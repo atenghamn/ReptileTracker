@@ -5,6 +5,8 @@ using ReptileTracker.Commons;
 using ReptileTracker.Feeding.Errors;
 using ReptileTracker.Feeding.Model;
 using ReptileTracker.Infrastructure.Persistence;
+using Serilog;
+using Serilog.Core;
 
 namespace ReptileTracker.Feeding.Service;
 
@@ -24,10 +26,12 @@ public sealed class FeedingService(IGenericRepository<FeedingEvent> feedingRepos
         {
             feedingRepository.Add(feedingEvent);
             feedingRepository.Save();
+            Log.Logger.Debug("Added new feeding event to reptile {ReptileId}", feedingEvent.ReptileId);
             return Result<FeedingEvent>.Success(feedingEvent);
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to add new feeding event to reptile {ReptileId}", feedingEvent.ReptileId);
             return Result<FeedingEvent>.Failure(FeedingErrors.CantSave);
         }
     }
@@ -40,10 +44,12 @@ public sealed class FeedingService(IGenericRepository<FeedingEvent> feedingRepos
             if (entity.Data == null) return Result<FeedingEvent>.Failure(FeedingErrors.NotFound);
             feedingRepository.Delete(entity.Data);
             feedingRepository.Save();
+            Log.Logger.Debug("Deleted feeding event with id {FeedingId}", id);
             return Result<FeedingEvent>.Success();
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to delete feeding event with id {FeedingId}", id);
             return Result<FeedingEvent>.Failure(FeedingErrors.CantDelete);
         }
     }
@@ -56,10 +62,12 @@ public sealed class FeedingService(IGenericRepository<FeedingEvent> feedingRepos
             if (entity.Data == null) return Result<FeedingEvent>.Failure(FeedingErrors.NotFound);
             feedingRepository.Update(feedingEvent);
             feedingRepository.Save();
+            Log.Logger.Debug("Updated feeding event to reptile {ReptileId}", feedingEvent.ReptileId);
             return Result<FeedingEvent>.Success(feedingEvent);
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to update event for for reptile");
             return Result<FeedingEvent>.Failure(FeedingErrors.CantUpdate);
         }
     }

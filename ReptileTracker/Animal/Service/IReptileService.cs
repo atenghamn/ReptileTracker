@@ -6,7 +6,7 @@ namespace ReptileTracker.Animal.Service;
 
 public interface IReptileService
 {
-    Result<Reptile> CreateReptile(string name, string species, DateTime birthdate, ReptileType type);
+    Result<Reptile> CreateReptile(string name, string species, DateTime birthdate, ReptileType type, int accountId);
     Result<Reptile> UpdateReptile(Reptile entity);
     Result<Reptile> GetReptileById(int id);
     Result<Reptile> DeleteReptile(int id);
