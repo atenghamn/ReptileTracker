@@ -135,3 +135,5 @@
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ReptileTracker.pdb
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ReptileTracker.genruntimeconfig.cache
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ref/ReptileTracker.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Serilog.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Serilog.Sinks.Console.dll

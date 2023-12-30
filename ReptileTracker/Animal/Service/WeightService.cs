@@ -5,6 +5,7 @@ using ReptileTracker.Animal.Errors;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
 using ReptileTracker.Infrastructure.Persistence;
+using Serilog;
 
 namespace ReptileTracker.Animal.Service;
 
@@ -16,10 +17,13 @@ public class WeightService(IGenericRepository<Weight> weightRepository) : IWeigh
         {
             weightRepository.Add(weight);
             weightRepository.Save();
+            Log.Logger.Debug("Added new weight measurement to reptile {WeightReptileId}", weight.ReptileId);
             return Result<Weight>.Success(weight);
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to add new weight measurement to reptile {WeightReptileId}", weight.ReptileId);
+
             return Result<Weight>.Failure(WeightErrors.CantSave);
         }
     }
@@ -40,10 +44,12 @@ public class WeightService(IGenericRepository<Weight> weightRepository) : IWeigh
             if (entity.Data == null) return Result<Weight>.Failure(WeightErrors.NotFound);
             weightRepository.Delete(entity.Data);
             weightRepository.Save();
+            Log.Logger.Debug("Deleted weight measurement for reptile {WeightReptileId}", weightId);
             return Result<Weight>.Success();
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to delete weight measurement for reptile {WeightReptileId}", weightId);
             return Result<Weight>.Failure(WeightErrors.CantDelete);
         }
     }
@@ -56,10 +62,12 @@ public class WeightService(IGenericRepository<Weight> weightRepository) : IWeigh
             if (entity.Data == null) return Result<Weight>.Failure(WeightErrors.NotFound);
             weightRepository.Update(weight);
             weightRepository.Save();
+            Log.Logger.Debug("Failed to update weight measurement to reptile {WeightReptileId}", weight.ReptileId);
             return Result<Weight>.Success(weight);
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to update weight measurement to reptile {WeightReptileId}", weight.ReptileId);
             return Result<Weight>.Failure(WeightErrors.CantUpdate);
         }
     }

@@ -5,6 +5,8 @@ using ReptileTracker.Animal.Errors;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
 using ReptileTracker.Infrastructure.Persistence;
+using Serilog;
+using Serilog.Core;
 
 namespace ReptileTracker.Animal.Service;
 
@@ -16,10 +18,12 @@ public class LengthService(IGenericRepository<Length> lengthRepository) : ILengt
         {
             lengthRepository.Add(length);
             lengthRepository.Save();
+            Log.Logger.Debug("Added new length measurement to reptile {LengthReptileId}", length.ReptileId);
             return Result<Length>.Success(length);
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to add new length measurement to reptile {LengthReptileId}", length.ReptileId);
             return Result<Length>.Failure(LengthErrors.CantSave);
         }
     }
@@ -40,10 +44,12 @@ public class LengthService(IGenericRepository<Length> lengthRepository) : ILengt
             if (entity.Data == null) return Result<Length>.Failure(LengthErrors.NotFound);
             lengthRepository.Delete(entity.Data);
             lengthRepository.Save();
+            Log.Logger.Debug("Deleted length measurement to reptile {LengthReptileId}", lengthId);
             return Result<Length>.Success();
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to add  new length measurement to reptile {LengthReptileId}", lengthId);
             return Result<Length>.Failure(LengthErrors.CantDelete);
         }
     }
@@ -56,10 +62,12 @@ public class LengthService(IGenericRepository<Length> lengthRepository) : ILengt
             if (entity.Data == null) return Result<Length>.Failure(LengthErrors.NotFound);
             lengthRepository.Update(length);
             lengthRepository.Save();
+            Log.Logger.Debug("Updated length measurement to reptile {LengthReptileId}", length.ReptileId);
             return Result<Length>.Success(length);
         }
         catch (Exception ex)
         {
+            Log.Logger.Error("Failed to update length measurement to reptile {LengthReptileId}", length.ReptileId);
             return Result<Length>.Failure(LengthErrors.CantUpdate);
         }
     }

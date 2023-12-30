@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "eP932HLtnyli7oPlkaRzQJstN7B1WKP+PWKjNEwkHqChX53WrosNqI9sv5H85zVk9/HBYv6xglM6kEidHiCivQ==",
+  "dgSpecHash": "L6p7bNAjwnd7FIXezOB7ScOtBkrGX8GXOYZTDreHVFmWsipJftdV5lTfm/7JHLIYG6FQZJ0/89+1W7GBX5Tg5w==",
   "success": true,
   "projectFilePath": "/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/ReptileTracker.csproj",
   "expectedPackageFiles": [
@@ -47,6 +47,8 @@
     "/home/atenghamn/.nuget/packages/microsoft.sqlserver.server/1.0.0/microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/microsoft.win32.systemevents/6.0.0/microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/mono.texttemplating/2.2.1/mono.texttemplating.2.2.1.nupkg.sha512",
+    "/home/atenghamn/.nuget/packages/serilog/3.1.1/serilog.3.1.1.nupkg.sha512",
+    "/home/atenghamn/.nuget/packages/serilog.sinks.console/5.0.1/serilog.sinks.console.5.0.1.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "/home/atenghamn/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
