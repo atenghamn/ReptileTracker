@@ -12,7 +12,7 @@ using ReptileTracker.Infrastructure.Persistence;
 using ReptileTracker.Shedding.Model;
 using ReptileTracker.Shedding.Service;
 using Serilog;
-using Serilog.Core;
+using ReptileTracker.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,5 +61,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .MinimumLevel.Information()
     .CreateLogger();
+
+app.MapGets();
 
 app.Run();

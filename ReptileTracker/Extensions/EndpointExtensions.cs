@@ -8,7 +8,7 @@ namespace ReptileTracker.Extensions;
 
 public static class EndpointExtensions
 {
-    public static WebApplication MapGet(this WebApplication app, int pageSize = 10)
+    public static WebApplication MapGets(this WebApplication app, int pageSize = 10)
     {
         app.MapGet("reptile/shedding/{sheddingEventId:int}", (
             [FromServices] SheddingService sheddingService,
