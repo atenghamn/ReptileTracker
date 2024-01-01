@@ -1,7 +1,13 @@
+using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ReptileTracker.Animal.Model;
 using ReptileTracker.Animal.Service;
+using ReptileTracker.Commons;
+using ReptileTracker.Feeding.Model;
 using ReptileTracker.Feeding.Service;
+using ReptileTracker.Shedding.Model;
 using ReptileTracker.Shedding.Service;
 
 namespace ReptileTracker.Extensions;
@@ -93,14 +99,140 @@ public static class EndpointExtensions
         
         return app;
     }
-    /*
-     *    app.MapPost("reptile/feeding", (FeedingEvent feedingEvent, 
-                [FromServices]FeedingService feedingService) =>
-            {
-                var result = feedingService.AddFeedingEvent(feedingEvent);
 
-                return result.IsFailure ? Results.BadRequest() : Results.NoContent();
-            });
-     */
+
+    public static WebApplication MapPosts(this WebApplication app)
+    {
+        app.MapPost("reptile/feeding", (FeedingEvent feedingEvent, 
+            [FromServices]FeedingService feedingService) =>
+        {
+            var result = feedingService.AddFeedingEvent(feedingEvent);
+
+            return result;
+        });
+
+        app.MapPost("reptile/shedding", (SheddingEvent sheddingEvent,
+            [FromServices] SheddingService sheddingService) =>
+        {
+            var result = sheddingService.AddSheddingEvent(sheddingEvent);
+            return result;
+        });
+
+        app.MapPost("reptile/length", (Length lengthMeasurement,
+            [FromServices] LengthService lengthService) =>
+        {
+            var result = lengthService.AddLength(lengthMeasurement);
+            return result;
+        });
+        
+        app.MapPost("reptile/weight", (Weight weigthMeasurement, 
+            [FromServices] WeightService weightService) =>
+        {
+            var result = weightService.AddWeight(weigthMeasurement);
+            return result;
+        });
+
+        app.MapPost("reptile", (string name, string species, DateTime birthdate, ReptileType type, int accountId,
+            [FromServices] ReptileService reptileService) =>
+        {
+            var result = reptileService.CreateReptile(
+                name: name,
+                species: species,
+                birthdate: birthdate,
+                type: type,
+                accountId: accountId);
+
+            return result;
+        });
+
+        return app;
+    }
+    public static WebApplication MapPuts(this WebApplication app)
+    {
+        app.MapPut("reptile/feeding", (FeedingEvent feedingEvent, 
+            [FromServices]FeedingService feedingService) =>
+        {
+            var result = feedingService.UpdateFeedingEvent(feedingEvent);
+
+            return result;
+        });
+
+        app.MapPut("reptile/shedding", (SheddingEvent sheddingEvent,
+            [FromServices] SheddingService sheddingService) =>
+        {
+            var result = sheddingService.UpdateSheddingEvent(sheddingEvent);
+            return result;
+        });
+
+        app.MapPut("reptile/length", (Length lengthMeasurement,
+            [FromServices] LengthService lengthService) =>
+        {
+            var result = lengthService.UpdateLength(lengthMeasurement);
+            return result;
+        });
+        
+        app.MapPut("reptile/weight", (Weight weightMeasurement, 
+            [FromServices] WeightService weightService) =>
+        {
+            var result = weightService.UpdateWeight(weightMeasurement);
+            return result;
+        });
+
+        app.MapPut("reptile", (Reptile reptile,
+            [FromServices] ReptileService reptileService) =>
+        {
+            var result = reptileService.UpdateReptile(reptile);
+            return result;
+        });
+
+        return app;
+    }
+
+    public static WebApplication MapDeletes(this WebApplication app)
+    {
+        app.MapDelete("reptile/feeding/{feedingId:int}", (
+                [FromServices] FeedingService feedingService,
+                [FromRoute] int feedingId) =>
+            {
+                var result = feedingService.DeleteFeedingEvent(feedingId);
+                return result;
+            }
+        );
+
+        app.MapDelete("reptile/shedding/{sheddingId:int}", (
+            [FromServices] SheddingService sheddingService,
+            [FromRoute] int sheddingId) =>
+        {
+            var result = sheddingService.DeleteSheddingEvent(sheddingId);
+            return result;
+        });
+
+        app.MapDelete("reptile/length/{lengthId:int}", ([FromServices] LengthService lengthService,
+            [FromRoute] int lengthId) =>
+        {
+            var result = lengthService.DeleteLength(lengthId);
+            return result;
+        });
+
+        app.MapDelete("reptile/weight/{weightId:int}", (
+            [FromServices] WeightService weightService,
+            [FromRoute] int weightId) =>
+        {
+            var result = weightService.DeleteWeight(weightId);
+            return result;
+        });
+
+        app.MapDelete("reptile/{reptileId:int}", (
+            [FromServices] ReptileService reptileService,
+            [FromRoute] int reptileId) =>
+        {
+            var result = reptileService.DeleteReptile(reptileId);
+            return result;
+        });
+        
+        return app;
+    }
+    
+
     
 }

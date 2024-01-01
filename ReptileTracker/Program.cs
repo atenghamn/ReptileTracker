@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -63,5 +63,8 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 app.MapGets();
+app.MapPosts();
+app.MapPuts();
+app.MapDeletes();
 
 app.Run();
