@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
 
@@ -10,5 +11,5 @@ public interface IWeightService
     Result<Weight> GetWeightById(int weightId);
     Result<Weight> DeleteWeight(int weightId);
     Result<Weight> UpdateWeight(Weight weight);
-    Result<List<Weight>> GetWeights();
+    Task<Result<List<Weight>>> GetWeights(int reptileId);
 }

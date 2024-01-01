@@ -32,6 +32,8 @@
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.SqlServer.Server.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.Win32.SystemEvents.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Mono.TextTemplating.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Serilog.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Serilog.Sinks.Console.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -135,5 +137,3 @@
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ReptileTracker.pdb
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ReptileTracker.genruntimeconfig.cache
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ref/ReptileTracker.dll
-/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Serilog.dll
-/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Serilog.Sinks.Console.dll

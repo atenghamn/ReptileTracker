@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ReptileTracker.Animal.Errors;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
@@ -9,7 +10,7 @@ using Serilog;
 
 namespace ReptileTracker.Animal.Service;
 
-public class WeightService(IGenericRepository<Weight> weightRepository) : IWeightService
+public sealed class WeightService(IWeightRepository weightRepository) : IWeightService
 {
     public Result<Weight> AddWeight(Weight weight)
     {
@@ -72,11 +73,11 @@ public class WeightService(IGenericRepository<Weight> weightRepository) : IWeigh
         }
     }
 
-    public Result<List<Weight>> GetWeights()
+    public async Task<Result<List<Weight>>> GetWeights(int reptileId)
     {
         try
         {
-            var entities = weightRepository.GetAll();
+            var entities = weightRepository.GetAllForReptile(reptileId).Result;
             var list = entities.ToList();
             return list.Count < 1 ? Result<List<Weight>>.Failure(WeightErrors.NoWeightHistory) : Result<List<Weight>>.Success(list);
         }

@@ -11,7 +11,7 @@ namespace ReptileTrackerTests.Animal.Service;
 public class WeightServiceTests
 {
     private IWeightService _weightService;
-    private IGenericRepository<Weight> _mockedWeigthRepository = Substitute.For<IGenericRepository<Weight>>();
+    private IWeightRepository _mockedWeigthRepository = Substitute.For<IWeightRepository>();
     private Weight _weigth;
 
     [SetUp]
@@ -115,14 +115,14 @@ public class WeightServiceTests
     [Test]
     public void GetWeigthEvents_WithValidData_ReturnsSuccess()
     {
-        var weigthEvents = new[]
+        var weigthEvents = new List<Weight>()
         {
             new Weight() { Id = 1, ReptileId = 1, Weighing = 10, WeighingDate = DateTime.Now.AddDays(-2) },
             new Weight() { Id = 2, ReptileId = 2, Weighing = 11, WeighingDate = DateTime.Now.AddDays(-1) },
             new Weight() { Id = 3, ReptileId = 3, Weighing = 12, WeighingDate = DateTime.Now }
         };
-        _mockedWeigthRepository.GetAll().Returns(weigthEvents);
-        var result = _weightService.GetWeights();
+        _mockedWeigthRepository.GetAllForReptile(1).Returns(weigthEvents);
+        var result = _weightService.GetWeights(1).Result;
         
         Assert.Multiple(() =>
         {
@@ -137,11 +137,11 @@ public class WeightServiceTests
     {
         var emptyWeigthEvents = new List<Weight>();
         _mockedWeigthRepository.GetAll().Returns(emptyWeigthEvents);
-        var result = _weightService.GetWeights();
+        var result = _weightService.GetWeights(2).Result;
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
-            Assert.That(result.Error, Is.EqualTo(WeightErrors.NoWeightHistory));
+            Assert.That(result.Error, Is.EqualTo(WeightErrors.EventlistNotFound));
         });
     }
 }

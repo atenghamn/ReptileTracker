@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
 
@@ -10,5 +11,5 @@ public interface ILengthService
     Result<Length> GetLengthById(int lengthId);
     Result<Length> DeleteLength(int lengthId);
     Result<Length> UpdateLength(Length length);
-    Result<List<Length>> GetLengths();
+    Task<Result<List<Length>>> GetLengths(int reptileId);
 }

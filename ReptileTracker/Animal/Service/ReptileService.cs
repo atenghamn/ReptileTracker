@@ -1,5 +1,7 @@
 using System;
-using Microsoft.Identity.Client;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ReptileTracker.Animal.Errors;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
@@ -8,7 +10,7 @@ using Serilog;
 
 namespace ReptileTracker.Animal.Service;
 
-public class ReptileService(IGenericRepository<Reptile> reptileRepository) : IReptileService
+public sealed class ReptileService(IReptileRepository reptileRepository) : IReptileService
 {
     public Result<Reptile> CreateReptile(string name, string species, DateTime birthdate, ReptileType type, int accountId)
     {
@@ -81,6 +83,21 @@ public class ReptileService(IGenericRepository<Reptile> reptileRepository) : IRe
             Log.Logger.Debug("Failed to remove reptile {ReptileId} ", id);
 
             return Result<Reptile>.Failure(ReptileErrors.CantDelete);
+        }
+    }
+
+    public async Task<Result<List<Reptile>>> GetReptilesByAccount(int id)
+    {
+        try
+        {
+            var reptiles = await reptileRepository.GetByAccount(id);
+            return reptiles is not null
+                ? Result<List<Reptile>>.Success(reptiles.ToList())
+                : Result<List<Reptile>>.Failure(ReptileErrors.DidntFindReptiles);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<Reptile>>.Failure(ReptileErrors.NotFound);
         }
     }
 }

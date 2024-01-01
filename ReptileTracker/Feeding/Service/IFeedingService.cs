@@ -10,6 +10,6 @@ public interface IFeedingService
     Result<FeedingEvent> GetFeedingEventById(int feedingEventId);
     Result<FeedingEvent> DeleteFeedingEvent(int feedingEventId);
     Result<FeedingEvent> UpdateFeedingEvent(FeedingEvent feedingEvent);
-    Result<List<FeedingEvent>> GetFeedingEvents();
+    Result<List<FeedingEvent>> GetFeedingEvents(int reptileId);
 
 }
