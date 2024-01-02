@@ -1,14 +1,13 @@
 using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Animal.Service;
-using ReptileTracker.Commons;
 using ReptileTracker.Feeding.Model;
 using ReptileTracker.Feeding.Service;
 using ReptileTracker.Shedding.Model;
 using ReptileTracker.Shedding.Service;
+using System.Security.Claims;
 
 namespace ReptileTracker.Extensions;
 

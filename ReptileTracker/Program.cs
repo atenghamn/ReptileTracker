@@ -43,6 +43,11 @@ builder.Services.AddScoped<IWeightRepository, WeightRepository>();
 builder.Services.AddScoped<ILengthRepository, LengthRepository>();
 builder.Services.AddScoped<IReptileRepository, ReptileRepository>();
 
+builder.Services.AddAuthorization();
+builder.Services
+    .AddAuthentication(defaultScheme: "Bearer")
+    .AddJwtBearer();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -56,6 +61,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
