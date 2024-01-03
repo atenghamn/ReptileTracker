@@ -1,8 +1,11 @@
+using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Animal.Service;
 using ReptileTracker.EntityFramework;
@@ -47,6 +50,12 @@ builder.Services.AddAuthorization();
 builder.Services
     .AddAuthentication(defaultScheme: "Bearer")
     .AddJwtBearer();
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ReptileContext>();
+
+builder.Services.IdentityExtensions();
+builder.Services.CookieExtensions();
 
 var app = builder.Build();
 
