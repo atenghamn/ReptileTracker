@@ -1,11 +1,10 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Animal.Service;
 using ReptileTracker.EntityFramework;
@@ -46,16 +45,16 @@ builder.Services.AddScoped<IWeightRepository, WeightRepository>();
 builder.Services.AddScoped<ILengthRepository, LengthRepository>();
 builder.Services.AddScoped<IReptileRepository, ReptileRepository>();
 
-builder.Services.AddAuthorization();
 builder.Services
-    .AddAuthentication(defaultScheme: "Bearer")
-    .AddJwtBearer();
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ReptileContext>();
+    .AddAuthentication()
+    .AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddAuthorizationBuilder();
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddEntityFrameworkStores<ReptileContext>()
+    .AddApiEndpoints();
 
 builder.Services.IdentityExtensions();
-builder.Services.CookieExtensions();
+// builder.Services.CookieExtensions();
 
 var app = builder.Build();
 
@@ -68,6 +67,8 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty;
     });
 }
+
+app.MapIdentityApi<IdentityUser>();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ReptileTracker.Animal.Model;
@@ -6,7 +7,7 @@ using ReptileTracker.Shedding.Model;
 
 namespace ReptileTracker.EntityFramework;
 
-public class ReptileContext(IConfiguration configuration) : DbContext
+public class ReptileContext(IConfiguration configuration) : IdentityDbContext
 {
     public DbSet<Account.Model.Account>? Accounts { get; set; }
     public DbSet<Length>? Lengths { get; set; }
