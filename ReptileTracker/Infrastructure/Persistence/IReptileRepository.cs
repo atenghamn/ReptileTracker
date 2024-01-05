@@ -6,5 +6,5 @@ namespace ReptileTracker.Infrastructure.Persistence;
 
 public interface IReptileRepository : IGenericRepository<Reptile>
 {
-    Task<IEnumerable<Reptile?>> GetByAccount(int accountId);
+    Task<IEnumerable<Reptile?>> GetByAccount(string accountId);
 }

@@ -1,8 +1,11 @@
+using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ReptileTracker.Account.Model;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Animal.Service;
 using ReptileTracker.EntityFramework;
@@ -21,7 +24,6 @@ if (builder.Environment.IsDevelopment())
     builder.Configuration.AddUserSecrets<Program>();
 }
 
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -39,9 +41,22 @@ builder.Services.AddScoped<IReptileService, ReptileService>();
 builder.Services.AddScoped(typeof(IGenericRepository<Weight>), typeof(GenericRepository<Weight>));
 builder.Services.AddScoped(typeof(IGenericRepository<Length>), typeof(GenericRepository<Length>));
 builder.Services.AddScoped(typeof(IGenericRepository<Reptile>), typeof(GenericRepository<Reptile>));
+builder.Services.AddScoped(typeof(IGenericRepository<Account>), typeof(GenericRepository<Account>));
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IWeightRepository, WeightRepository>();
 builder.Services.AddScoped<ILengthRepository, LengthRepository>();
 builder.Services.AddScoped<IReptileRepository, ReptileRepository>();
+
+builder.Services
+    .AddAuthentication()
+    .AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddAuthorizationBuilder();
+builder.Services.AddIdentityCore<Account>()
+    .AddEntityFrameworkStores<ReptileContext>()
+    .AddApiEndpoints();
+
+builder.Services.IdentityExtensions();
+// builder.Services.CookieExtensions();
 
 var app = builder.Build();
 
@@ -55,7 +70,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.MapIdentityApi<Account>();
+
 app.UseHttpsRedirection();
+app.UseAuthorization();
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

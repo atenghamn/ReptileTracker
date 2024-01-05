@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Identity.Client;
 using ReptileTracker.Animal.Errors;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Commons;
@@ -10,12 +11,14 @@ using Serilog;
 
 namespace ReptileTracker.Animal.Service;
 
-public sealed class ReptileService(IReptileRepository reptileRepository) : IReptileService
+public sealed class ReptileService(IReptileRepository reptileRepository, IAccountRepository accountRepository) : IReptileService
 {
-    public Result<Reptile> CreateReptile(string name, string species, DateTime birthdate, ReptileType type, int accountId)
+    public Result<Reptile> CreateReptile(string name, string species, DateTime birthdate, ReptileType type, string username)
     {
         try
         {
+            var account =  accountRepository.GetByUsername(username).Result;
+            var accountId = account.Id;
             var reptile = new Reptile()
             {
                 Name = name,
@@ -32,7 +35,7 @@ public sealed class ReptileService(IReptileRepository reptileRepository) : IRept
         }
         catch (Exception ex)
         {
-            Log.Logger.Error("Failed to add reptile {Name} to account {AccountId} ", name, accountId);
+            Log.Logger.Error("Failed to add reptile {Name} ", name);
 
             return Result<Reptile>.Failure(ReptileErrors.CantSave);
         }
@@ -86,11 +89,12 @@ public sealed class ReptileService(IReptileRepository reptileRepository) : IRept
         }
     }
 
-    public async Task<Result<List<Reptile>>> GetReptilesByAccount(int id)
+    public async Task<Result<List<Reptile>>> GetReptilesByAccount(string username)
     {
         try
         {
-            var reptiles = await reptileRepository.GetByAccount(id);
+            var account = accountRepository.GetByUsername(username).Result;
+            var reptiles = await reptileRepository.GetByAccount(account.Id);
             return reptiles is not null
                 ? Result<List<Reptile>>.Success(reptiles.ToList())
                 : Result<List<Reptile>>.Failure(ReptileErrors.DidntFindReptiles);

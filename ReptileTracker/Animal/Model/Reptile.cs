@@ -45,7 +45,7 @@ public class Reptile
     
     [ForeignKey("Account")]
     [Column("account_id")]
-    public int AccountId { get; set; }
+    public string AccountId { get; set; }
     
     [NotMapped]
     public Account.Model.Account Account { get; set; }

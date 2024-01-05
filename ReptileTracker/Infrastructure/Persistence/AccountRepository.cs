@@ -9,6 +9,6 @@ public class AccountRepository(ReptileContext context)
 {
     public async Task<Account.Model.Account?> GetByUsername(string username)
     {
-        return await _context.Accounts!.FirstOrDefaultAsync(x => x.Username == username);
+        return await _context.Accounts!.FirstOrDefaultAsync(x => x.UserName == username);
     } 
 }

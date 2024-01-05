@@ -8,7 +8,7 @@ using ReptileTracker.EntityFramework;
 namespace ReptileTracker.Infrastructure.Persistence;
 public class ReptileRepository(ReptileContext context) : GenericRepository<Reptile>(context), IReptileRepository
 {
-    public async Task<IEnumerable<Reptile?>> GetByAccount(int accountId)
+    public async Task<IEnumerable<Reptile?>> GetByAccount(string accountId)
     {
         var reptiles = await _context.Reptiles.Where(x => x.AccountId == accountId).ToListAsync();
         return reptiles;
