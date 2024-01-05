@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ReptileTracker.Account.Model;
 using ReptileTracker.Animal.Model;
 using ReptileTracker.Animal.Service;
 using ReptileTracker.EntityFramework;
@@ -22,7 +23,6 @@ if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -49,7 +49,7 @@ builder.Services
     .AddAuthentication()
     .AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
-builder.Services.AddIdentityCore<IdentityUser>()
+builder.Services.AddIdentityCore<Account>()
     .AddEntityFrameworkStores<ReptileContext>()
     .AddApiEndpoints();
 
@@ -68,7 +68,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<Account>();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

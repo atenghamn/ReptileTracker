@@ -22,14 +22,10 @@ public class ReptileServiceTests
     {
         Account testAccount = new Account()
         {
-            Username = "testUsername",
+            UserName = "testUsername",
             Email = "testEmail@test.com",
-            Name = "testName",
-            Password = "testPassword",
-            Created = DateTime.Now,
-            LastUpdated = DateTime.Now,
-            ResetToken = "testResetToken",
-            ResetTokenExpiration = DateTime.Now
+            FirstName = "Jane",
+            LastName = "Doe"
         };
         
         _reptile = new Reptile()
