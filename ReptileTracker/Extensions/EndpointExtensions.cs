@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using ReptileTracker.Animal.Model;
@@ -87,11 +88,12 @@ public static class EndpointExtensions
             return result;
         }).RequireAuthorization();
 
-        app.MapGet("reptile/list/{accountId:int}", (
+        app.MapGet("reptile/list/{username}", (
+            ClaimsIdentity user,
             [FromServices] ReptileService reptileService,
-            [FromRoute] int accountId) =>
+            [FromRoute] string username) =>
         {
-            var result = reptileService.GetReptilesByAccount(accountId);
+            var result = reptileService.GetReptilesByAccount(username);
             return result;
         }).RequireAuthorization();
         
@@ -130,7 +132,7 @@ public static class EndpointExtensions
             return result;
         }).RequireAuthorization();
 
-        app.MapPost("reptile", (string name, string species, DateTime birthdate, ReptileType type, int accountId,
+        app.MapPost("reptile", (string name, string species, DateTime birthdate, ReptileType type, ClaimsPrincipal user,
             [FromServices] ReptileService reptileService) =>
         {
             var result = reptileService.CreateReptile(
@@ -138,7 +140,7 @@ public static class EndpointExtensions
                 species: species,
                 birthdate: birthdate,
                 type: type,
-                accountId: accountId);
+                username: user.Identity.Name);
 
             return result;
         }).RequireAuthorization();

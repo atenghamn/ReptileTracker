@@ -41,6 +41,8 @@ builder.Services.AddScoped<IReptileService, ReptileService>();
 builder.Services.AddScoped(typeof(IGenericRepository<Weight>), typeof(GenericRepository<Weight>));
 builder.Services.AddScoped(typeof(IGenericRepository<Length>), typeof(GenericRepository<Length>));
 builder.Services.AddScoped(typeof(IGenericRepository<Reptile>), typeof(GenericRepository<Reptile>));
+builder.Services.AddScoped(typeof(IGenericRepository<Account>), typeof(GenericRepository<Account>));
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IWeightRepository, WeightRepository>();
 builder.Services.AddScoped<ILengthRepository, LengthRepository>();
 builder.Services.AddScoped<IReptileRepository, ReptileRepository>();

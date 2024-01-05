@@ -15,6 +15,7 @@ public class ReptileServiceTests
 {
     private IReptileService _reptileService;
     private IReptileRepository _moockedReptileRepository = Substitute.For<IReptileRepository>();
+    private IAccountRepository _mockedAccountRepository = Substitute.For<IAccountRepository>();
     private Reptile _reptile;
 
     [SetUp]
@@ -41,9 +42,10 @@ public class ReptileServiceTests
             FeedingHistory = new List<FeedingEvent>(),
             SheddingHistory = new List<SheddingEvent>(),
         };
-        
+
+        _mockedAccountRepository.GetByUsername("kalle@test.se").Returns(testAccount);
         _moockedReptileRepository.GetById(1).Returns(_reptile);
-        _reptileService = new ReptileService(_moockedReptileRepository);
+        _reptileService = new ReptileService(_moockedReptileRepository, _mockedAccountRepository);
     }
     
       [Test]
@@ -81,8 +83,8 @@ public class ReptileServiceTests
             name: "Red", 
             species: "Blood Python", 
             birthdate: DateTime.Now, 
-            type: ReptileType.SNAKE,
-            accountId: 1);
+            type: ReptileType.SNAKE, 
+            username:"kalle@test.se");
         
         Assert.Multiple(() =>
         {
@@ -122,7 +124,7 @@ public class ReptileServiceTests
         {
             Id = 1,
             ReptileType = ReptileType.CROCODILIAN,
-            AccountId = 1,
+            AccountId = "1",
             Name = "Godzilla",
             Birthdate = new DateTime(2023, 11, 25),
             Species = "Alligtor",
@@ -148,7 +150,7 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
         {
             Id = 2,
             ReptileType = ReptileType.CROCODILIAN,
-            AccountId = 1,
+            AccountId = "1",
             Name = "Godzilla",
             Birthdate = new DateTime(2023, 11, 25),
             Species = "Alligtor",
@@ -173,7 +175,7 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
         {
             new Reptile()
             {
-                AccountId = 1,
+                AccountId = "1",
                 ReptileType = ReptileType.CROCODILIAN,
                 Name = "Godzilla",
                 Birthdate = new DateTime(2023, 11, 25),
@@ -185,7 +187,7 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
             },
             new Reptile()
             {
-                AccountId = 1,
+                AccountId = "1",
                 ReptileType = ReptileType.CROCODILIAN,
                 Name = "Bridezilla",
                 Birthdate = new DateTime(2023, 11, 25),
@@ -197,9 +199,10 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
             }
         };
 
-        _moockedReptileRepository.GetByAccount(1).Returns(reptiles);
+        _moockedReptileRepository.GetByAccount("12345").Returns(reptiles);
+        _mockedAccountRepository.GetByUsername("janedoe@example.com").Returns(new Account(){Id = "12345"});
 
-        var result = _reptileService.GetReptilesByAccount(1).Result;
+        var result = _reptileService.GetReptilesByAccount("janedoe@example.com").Result;
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -211,8 +214,8 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
     [Test]
     public void GetReptilesByAccount_WithInvalidId_ReturnsError()
     {
-        _moockedReptileRepository.GetByAccount(2).Returns((Task<IEnumerable<Reptile?>>)null);
-        var result = _reptileService.GetReptilesByAccount(2).Result;
+        _moockedReptileRepository.GetByAccount("2").Returns((Task<IEnumerable<Reptile?>>)null);
+        var result = _reptileService.GetReptilesByAccount("2").Result;
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
