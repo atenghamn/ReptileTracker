@@ -152,3 +152,7 @@
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTrackerTests/obj/Debug/net8.0/ref/ReptileTrackerTests.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTrackerTests/bin/Debug/net8.0/Serilog.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTrackerTests/bin/Debug/net8.0/Serilog.Sinks.Console.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTrackerTests/bin/Debug/net8.0/ReptileTracker.staticwebassets.runtime.json
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTrackerTests/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTrackerTests/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTrackerTests/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.UI.dll
