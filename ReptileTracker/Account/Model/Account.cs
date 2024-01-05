@@ -12,13 +12,13 @@ public class Account : IdentityUser
 {
     [StringLength(60)]
     [Column("FirstName")]
-    public string FirstName { get; set; }
+    public string? FirstName { get; set; }
     
     [StringLength(60)]
     [Column("LastName")]
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
     
     [NotMapped]
-    public ICollection<Reptile> Reptiles { get; set; }
+    public ICollection<Reptile>? Reptiles { get; set; }
     
 }
