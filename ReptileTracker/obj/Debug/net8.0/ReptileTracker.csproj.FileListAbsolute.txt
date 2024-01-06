@@ -1,13 +1,18 @@
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/appsettings.Development.json
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/appsettings.json
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/ReptileTracker.staticwebassets.runtime.json
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/ReptileTracker
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/ReptileTracker.deps.json
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/ReptileTracker.runtimeconfig.json
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/ReptileTracker.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/ReptileTracker.pdb
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/AspNetCoreRateLimit.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Azure.Core.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Azure.Identity.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Humanizer.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.UI.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.dll
@@ -32,6 +37,7 @@
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.SqlServer.Server.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.Win32.SystemEvents.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Mono.TextTemplating.dll
+/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Newtonsoft.Json.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Serilog.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Serilog.Sinks.Console.dll
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
@@ -137,7 +143,3 @@
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ReptileTracker.pdb
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ReptileTracker.genruntimeconfig.cache
 /home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/obj/Debug/net8.0/ref/ReptileTracker.dll
-/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/ReptileTracker.staticwebassets.runtime.json
-/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
-/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-/home/atenghamn/RiderProjects/RT/ReptileTracker/ReptileTracker/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.UI.dll

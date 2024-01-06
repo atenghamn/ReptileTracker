@@ -1,4 +1,5 @@
 using System;
+using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
@@ -19,11 +20,13 @@ using ReptileTracker.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
 
+builder.Services.AddCustomRateLimiting(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -47,6 +50,7 @@ builder.Services.AddScoped<IWeightRepository, WeightRepository>();
 builder.Services.AddScoped<ILengthRepository, LengthRepository>();
 builder.Services.AddScoped<IReptileRepository, ReptileRepository>();
 
+
 builder.Services
     .AddAuthentication()
     .AddBearerToken(IdentityConstants.BearerScheme);
@@ -58,6 +62,7 @@ builder.Services.AddIdentityCore<Account>()
 builder.Services.IdentityExtensions();
 // builder.Services.CookieExtensions();
 builder.Services.CorsExtension();
+builder.Services.RateLimitingLoggingExtensions();
 
 var app = builder.Build();
 
@@ -74,6 +79,9 @@ if (app.Environment.IsDevelopment())
 app.MapIdentityApi<Account>();
 
 app.UseHttpsRedirection();
+app.UseHttpLogging();
+await app.UseCustomClientRateLimiting();
+
 app.UseAuthorization();
 
 Log.Logger = new LoggerConfiguration()
