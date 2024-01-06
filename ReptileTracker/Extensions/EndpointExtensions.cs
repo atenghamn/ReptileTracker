@@ -89,7 +89,6 @@ public static class EndpointExtensions
         }).RequireAuthorization();
 
         app.MapGet("reptile/list/{username}", (
-            ClaimsIdentity user,
             [FromServices] ReptileService reptileService,
             [FromRoute] string username) =>
         {

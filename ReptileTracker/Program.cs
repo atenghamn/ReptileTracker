@@ -57,6 +57,7 @@ builder.Services.AddIdentityCore<Account>()
 
 builder.Services.IdentityExtensions();
 // builder.Services.CookieExtensions();
+builder.Services.CorsExtension();
 
 var app = builder.Build();
 
@@ -84,5 +85,7 @@ app.MapGets();
 app.MapPosts();
 app.MapPuts();
 app.MapDeletes();
+
+// app.UseCors(policyName: "SomeExamplePolicy");
 
 app.Run();
