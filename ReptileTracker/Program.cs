@@ -83,6 +83,7 @@ app.UseHttpLogging();
 await app.UseCustomClientRateLimiting();
 
 app.UseAuthorization();
+app.UseCors("ReptileTrackerDashboard");
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
