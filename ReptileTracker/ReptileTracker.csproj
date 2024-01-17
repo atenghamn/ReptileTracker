@@ -9,6 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="mssql\**" />
+      <Content Remove="mssql\**" />
+      <EmbeddedResource Remove="mssql\**" />
+      <None Remove="mssql\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>

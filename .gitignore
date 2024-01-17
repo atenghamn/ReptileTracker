@@ -32,3 +32,15 @@
 /ReptileTracker/obj/project.nuget.cache
 *.dll
 *.exe
+/ReptileTracker/bin/Debug/net8.0/ReptileTracker.deps.json
+/ReptileTracker/bin/Debug/net8.0/ReptileTracker.dll
+/ReptileTracker/bin/Debug/net8.0/ReptileTracker.pdb
+/ReptileTracker/obj/Debug/net8.0/ref/ReptileTracker.dll
+/ReptileTracker/obj/Debug/net8.0/refint/ReptileTracker.dll
+/ReptileTracker/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.ReptileTracker.props
+/ReptileTracker/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.ReptileTracker.props
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.dll
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.genruntimeconfig.cache
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.pdb
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.sourcelink.json
+/ReptileTracker/obj/Debug/net8.0/staticwebassets.build.json

@@ -9,7 +9,7 @@ services:
     ports:
       - 1433:1433
     volumes:
-      - /mnt/c/repo/ReptileTracker/db/data:/var/opt/mssql/data
-      - /mnt/c/repo/ReptileTracker/db/mssql/log:/var/opt/mssql/log
+        - ./mssql/data:/var/opt/mssql/data
+        - ./mssql/log:/var/opt/mssql/log
     restart: unless-stopped
     container_name: ReptileDB
