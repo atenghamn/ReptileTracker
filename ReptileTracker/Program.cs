@@ -63,6 +63,8 @@ builder.Services.IdentityExtensions();
 // builder.Services.CookieExtensions();
 builder.Services.CorsExtension();
 builder.Services.RateLimitingLoggingExtensions();
+builder.Services.ApiVersioningExtension();
+
 
 var app = builder.Build();
 

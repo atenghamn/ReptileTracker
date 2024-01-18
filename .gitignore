@@ -44,3 +44,17 @@
 /ReptileTracker/obj/Debug/net8.0/ReptileTracker.pdb
 /ReptileTracker/obj/Debug/net8.0/ReptileTracker.sourcelink.json
 /ReptileTracker/obj/Debug/net8.0/staticwebassets.build.json
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.AssemblyInfo.cs
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.MvcApplicationPartsAssemblyInfo.cs
+/ReptileTracker/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Design.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Relational.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.SqlServer.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/ReptileTracker/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
+/ReptileTracker/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
