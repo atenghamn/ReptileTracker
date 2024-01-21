@@ -50,6 +50,12 @@ builder.Services.AddScoped<IWeightRepository, WeightRepository>();
 builder.Services.AddScoped<ILengthRepository, LengthRepository>();
 builder.Services.AddScoped<IReptileRepository, ReptileRepository>();
 
+builder.Services.AddOutputCache(c =>
+{
+    c.AddBasePolicy(builder => builder.Expire(TimeSpan.FromSeconds(30)));
+
+    c.AddPolicy("Expire60", builder => builder.Expire(TimeSpan.FromSeconds(60)));
+});
 
 builder.Services
     .AddAuthentication()
@@ -91,6 +97,8 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .MinimumLevel.Information()
     .CreateLogger();
+
+app.UseOutputCache();
 
 app.MapGets();
 app.MapPosts();
