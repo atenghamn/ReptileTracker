@@ -1,4 +1,0 @@
-sudo docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=zoeyRuleThemAll1337" \
-   -p 1433:1433 --name reptile_db --hostname reptile_db \
-   -d \
-   mcr.microsoft.com/mssql/server:2022-latest
