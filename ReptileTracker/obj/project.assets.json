@@ -4941,11 +4941,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\repo\\ReptileTracker\\ReptileTracker\\ReptileTracker.csproj",
+      "projectUniqueName": "D:\\repo\\ReptileTracker\\ReptileTracker\\ReptileTracker.csproj",
       "projectName": "ReptileTracker",
-      "projectPath": "C:\\repo\\ReptileTracker\\ReptileTracker\\ReptileTracker.csproj",
+      "projectPath": "D:\\repo\\ReptileTracker\\ReptileTracker\\ReptileTracker.csproj",
       "packagesPath": "C:\\Users\\alext\\.nuget\\packages\\",
-      "outputPath": "C:\\repo\\ReptileTracker\\ReptileTracker\\obj\\",
+      "outputPath": "D:\\repo\\ReptileTracker\\ReptileTracker\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\alext\\AppData\\Roaming\\NuGet\\NuGet.Config",

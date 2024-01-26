@@ -4543,11 +4543,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\repo\\ReptileTracker\\ReptileTrackerTests\\ReptileTrackerTests.csproj",
+      "projectUniqueName": "D:\\repo\\ReptileTracker\\ReptileTrackerTests\\ReptileTrackerTests.csproj",
       "projectName": "ReptileTrackerTests",
-      "projectPath": "C:\\repo\\ReptileTracker\\ReptileTrackerTests\\ReptileTrackerTests.csproj",
+      "projectPath": "D:\\repo\\ReptileTracker\\ReptileTrackerTests\\ReptileTrackerTests.csproj",
       "packagesPath": "C:\\Users\\alext\\.nuget\\packages\\",
-      "outputPath": "C:\\repo\\ReptileTracker\\ReptileTrackerTests\\obj\\",
+      "outputPath": "D:\\repo\\ReptileTracker\\ReptileTrackerTests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\alext\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4564,8 +4564,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\repo\\ReptileTracker\\ReptileTracker\\ReptileTracker.csproj": {
-              "projectPath": "C:\\repo\\ReptileTracker\\ReptileTracker\\ReptileTracker.csproj"
+            "D:\\repo\\ReptileTracker\\ReptileTracker\\ReptileTracker.csproj": {
+              "projectPath": "D:\\repo\\ReptileTracker\\ReptileTracker\\ReptileTracker.csproj"
             }
           }
         }
