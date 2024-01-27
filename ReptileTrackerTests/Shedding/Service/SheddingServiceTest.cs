@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices.JavaScript;
 using NSubstitute;
 using NuGet.Frameworks;
@@ -30,14 +31,14 @@ public class SheddingServiceTest
             Notes = "All went well!"
         };
         _sheddingService = new SheddingService(_mockedSheddingRepository);
-        _mockedSheddingRepository.GetById(1).Returns(_sheddingEvent);
+        _mockedSheddingRepository.GetByIdAsync(1, new CancellationToken()).Returns(_sheddingEvent);
     }
 
     [Test]
-    public void GetById_ShouldReturnSheddingEvent_WhenValidIdIsProvided()
+    public async Task GetById_ShouldReturnSheddingEvent_WhenValidIdIsProvided()
     {
         const int id = 1;
-        var result = _sheddingService.GetSheddingEventById(id);
+        var result = await _sheddingService.GetSheddingEventById(id, new CancellationToken());
 
         Assert.Multiple(() =>
         {
@@ -48,10 +49,10 @@ public class SheddingServiceTest
     }
 
     [Test]
-    public void GetById_ShouldReturnErrorResult_WhenInvalidIdIsProvided()
+    public async Task GetById_ShouldReturnErrorResult_WhenInvalidIdIsProvided()
     {
         const int id = 2;
-        var result = _sheddingService.GetSheddingEventById(id);
+        var result = await _sheddingService.GetSheddingEventById(id, new CancellationToken());
         
         Assert.Multiple(() =>
         {
@@ -61,11 +62,11 @@ public class SheddingServiceTest
     }
     
     [Test]
-    public void AddSheddingEvent_ShouldReturnSuccessResult_WhenValidSheddingEventIsProvided()
+    public async Task AddSheddingEvent_ShouldReturnSuccessResult_WhenValidSheddingEventIsProvided()
     {
         var sheddingEvent = new SheddingEvent() { Id = 2, ReptileId = 1, Date = DateTime.Now, Notes = "New shedding event" };
         _mockedSheddingRepository.AddAsync(Arg.Any<SheddingEvent>()).Returns(sheddingEvent);
-        var result = _sheddingService.AddSheddingEvent(sheddingEvent);
+        var result = await _sheddingService.AddSheddingEvent(sheddingEvent, new CancellationToken());
         
         Assert.Multiple(() =>
         {
@@ -76,9 +77,9 @@ public class SheddingServiceTest
     }
     
     [Test]
-    public void DeleteSheddingEvent_WithCorrectId_ReturnsSuccessResult()
+    public async Task DeleteSheddingEvent_WithCorrectId_ReturnsSuccessResult()
     {
-        var result = _sheddingService.DeleteSheddingEvent(1);
+        var result = await _sheddingService.DeleteSheddingEvent(1, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -87,9 +88,9 @@ public class SheddingServiceTest
     }
 
     [Test]
-    public void DeleteSheddingEvent_WithIncorrectId_ReturnsErrorResult()
+    public async Task DeleteSheddingEvent_WithIncorrectId_ReturnsErrorResult()
     {
-        var result = _sheddingService.DeleteSheddingEvent(2);
+        var result = await _sheddingService.DeleteSheddingEvent(2, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
@@ -98,11 +99,11 @@ public class SheddingServiceTest
     }
 
     [Test]
-    public void UpdateExistingSheddingEvent_ReturnsSuccess()
+    public async Task UpdateExistingSheddingEvent_ReturnsSuccess()
     {
         var updatedSheddingEvent = new SheddingEvent() { Id = 1, ReptileId = 1, Date = DateTime.Now, Notes = "Updated shedding event" };
-        _mockedSheddingRepository.GetById(1).Returns(updatedSheddingEvent);
-        var result = _sheddingService.UpdateSheddingEvent(updatedSheddingEvent);
+        _mockedSheddingRepository.GetByIdAsync(1, new CancellationToken()).Returns(updatedSheddingEvent);
+        var result = await _sheddingService.UpdateSheddingEvent(updatedSheddingEvent, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -112,11 +113,11 @@ public class SheddingServiceTest
     }
 
     [Test]
-    public void UpdateNonExistingSheddingEvent_ReturnsErrorResponse()
+    public async Task UpdateNonExistingSheddingEvent_ReturnsErrorResponse()
     {
         var nonExistingSheddingEvent = new SheddingEvent() { Id = 2, ReptileId = 1, Date = DateTime.Now, Notes = "Non-existing shedding event" };
         _mockedSheddingRepository.GetById(2).Returns((SheddingEvent)null);
-        var result = _sheddingService.UpdateSheddingEvent(nonExistingSheddingEvent);
+        var result = await _sheddingService.UpdateSheddingEvent(nonExistingSheddingEvent, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
@@ -125,7 +126,7 @@ public class SheddingServiceTest
     }
 
     [Test]
-    public void GetSheddingEvents_WithValidData_ReturnsSuccess()
+    public async Task GetSheddingEvents_WithValidData_ReturnsSuccess()
     {
         var sheddingEvents = new List<SheddingEvent>() { 
             new SheddingEvent()
@@ -147,8 +148,9 @@ public class SheddingServiceTest
                 Date = DateTime.Now, 
                 Notes = "Shedding event 3"
             } };
-        _mockedSheddingRepository.GetAllForReptile(1).Returns(sheddingEvents);
-        var result = _sheddingService.GetSheddingEvents(1);
+        var ct = new CancellationToken();
+        _mockedSheddingRepository.GetAllForReptile(1, ct).Returns(sheddingEvents);
+        var result = await _sheddingService.GetSheddingEvents(1, ct);
         
         Assert.Multiple(() =>
         {
@@ -159,11 +161,12 @@ public class SheddingServiceTest
     }
 
     [Test]
-    public void GetSheddingEvents_WithInvalidData_ReturnsError()
+    public async Task GetSheddingEvents_WithInvalidData_ReturnsError()
     {
         var emptySheddingEvents = new List<SheddingEvent>();
-        _mockedSheddingRepository.GetAllForReptile(2).Returns(emptySheddingEvents);
-        var result = _sheddingService.GetSheddingEvents(1);
+        var ct = new CancellationToken();
+        _mockedSheddingRepository.GetAllForReptile(2, ct).Returns(emptySheddingEvents);
+        var result = await _sheddingService.GetSheddingEvents(1, ct);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));

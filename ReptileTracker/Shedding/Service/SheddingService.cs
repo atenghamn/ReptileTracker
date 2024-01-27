@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ReptileTracker.Commons;
 using ReptileTracker.Infrastructure.Persistence;
 using ReptileTracker.Shedding.Errors;
@@ -12,12 +14,12 @@ namespace ReptileTracker.Shedding.Service;
 public sealed class SheddingService(ISheddingRepository sheddingRepository) : ISheddingService
 {
 
-    public Result<SheddingEvent> AddSheddingEvent(SheddingEvent sheddingEvent)
+    public async Task<Result<SheddingEvent>> AddSheddingEvent(SheddingEvent sheddingEvent, CancellationToken ct)
     {
         try
         {
-            sheddingRepository.Add(sheddingEvent);
-            sheddingRepository.Save();
+            await sheddingRepository.AddAsync(sheddingEvent);
+            await sheddingRepository.SaveAsync(ct);
             Log.Logger.Debug("Added shedding event to reptile {ReptileId}",sheddingEvent.ReptileId);
             return Result<SheddingEvent>.Success(sheddingEvent);
         }
@@ -28,22 +30,22 @@ public sealed class SheddingService(ISheddingRepository sheddingRepository) : IS
         }
     }
 
-    public Result<SheddingEvent> GetSheddingEventById(int sheddingEventId)
+    public async Task<Result<SheddingEvent>> GetSheddingEventById(int sheddingEventId, CancellationToken ct)
     {
-        var entity = sheddingRepository.GetById(sheddingEventId);
+        var entity = await sheddingRepository.GetByIdAsync(sheddingEventId, ct);
         return entity == null
             ? Result<SheddingEvent>.Failure(SheddingErrors.NotFound)
             : Result<SheddingEvent>.Success(entity: entity);
     }
 
-    public Result<SheddingEvent> DeleteSheddingEvent(int sheddingEventId)
+    public async Task<Result<SheddingEvent>> DeleteSheddingEvent(int sheddingEventId, CancellationToken ct)
     {
         try
         {
-            var entity = GetSheddingEventById(sheddingEventId);
+            var entity = await GetSheddingEventById(sheddingEventId, ct);
             if (entity.Data == null) return Result<SheddingEvent>.Failure(SheddingErrors.NotFound);
             sheddingRepository.Delete(entity.Data);
-            sheddingRepository.Save();
+            await sheddingRepository.SaveAsync(ct);
             Log.Logger.Debug("Deleted event with id {Id}", sheddingEventId);
             return Result<SheddingEvent>.Success();
         }
@@ -54,14 +56,14 @@ public sealed class SheddingService(ISheddingRepository sheddingRepository) : IS
         }
     }
 
-    public Result<SheddingEvent> UpdateSheddingEvent(SheddingEvent sheddingEvent)
+    public async Task<Result<SheddingEvent>> UpdateSheddingEvent(SheddingEvent sheddingEvent, CancellationToken ct)
     {
         try
         {
-            var entity = GetSheddingEventById(sheddingEvent.Id);
+            var entity = await GetSheddingEventById(sheddingEvent.Id, ct);
             if (entity.Data == null) return Result<SheddingEvent>.Failure(SheddingErrors.NotFound);
             sheddingRepository.Update(sheddingEvent);
-            sheddingRepository.Save();
+            await sheddingRepository.SaveAsync(ct);
             Log.Logger.Debug("Updated shedding event {Id}", sheddingEvent.Id);
             return Result<SheddingEvent>.Success(sheddingEvent);
         }
@@ -72,11 +74,11 @@ public sealed class SheddingService(ISheddingRepository sheddingRepository) : IS
         }
     }
 
-    public Result<List<SheddingEvent>> GetSheddingEvents(int reptileId)
+    public async Task<Result<List<SheddingEvent>>> GetSheddingEvents(int reptileId, CancellationToken ct)
     {
         try
         {
-            var entities = sheddingRepository.GetAllForReptile(reptileId).Result;
+            var entities = await sheddingRepository.GetAllForReptile(reptileId, ct);
             var list = entities.ToList();
             return list.Count < 1
                 ? Result<List<SheddingEvent>>.Failure(SheddingErrors.EventlistNotFound)

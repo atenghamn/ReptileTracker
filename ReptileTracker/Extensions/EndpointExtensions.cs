@@ -26,26 +26,30 @@ public static class EndpointExtensions
             .ReportApiVersions()
             .Build();
        
-        app.MapGet("api/v{version:apiVersion}/reptile/shedding/{sheddingEventId:int}", (
+        app.MapGet("api/v{version:apiVersion}/reptile/shedding/{sheddingEventId:int}", async (
             [FromServices] SheddingService sheddingService,
-            [FromRoute] int sheddingEventId) =>
-        {
-            var result = sheddingService.GetSheddingEventById(sheddingEventId);
-            return result;
-        }).RequireAuthorization().CacheOutput(x => x.Tag("shedding"));
-
-        app.MapGet("api/v{version:apiVersion}/reptile/shedding/list/{reptileId:int}", (
-            [FromServices] SheddingService sheddingService,
-            [FromRoute] int reptileId
+            [FromRoute] int sheddingEventId,
+            CancellationToken ct
             ) =>
         {
-            var result = sheddingService.GetSheddingEvents(reptileId);
+            var result = await sheddingService.GetSheddingEventById(sheddingEventId, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("shedding"));
 
-        app.MapGet("api/v{version:apiVersion}/reptile/feeding/{eventId:int}", (
+        app.MapGet("api/v{version:apiVersion}/reptile/shedding/list/{reptileId:int}", async (
+            [FromServices] SheddingService sheddingService,
+            [FromRoute] int reptileId,
+            CancellationToken ct
+            ) =>
+        {
+            var result = await sheddingService.GetSheddingEvents(reptileId, ct);
+            return result;
+        }).RequireAuthorization().CacheOutput(x => x.Tag("shedding"));
+
+        app.MapGet("api/v{version:apiVersion}/reptile/feeding/{eventId:int}", async (
             [FromServices] FeedingService feedingService,
-            [FromRoute] int eventId) =>
+            [FromRoute] int eventId,
+            CancellationToken ct) =>
         {
             var result = feedingService.GetFeedingEventById(eventId);
             return result;
@@ -129,7 +133,7 @@ public static class EndpointExtensions
         app.MapPost("api/v{version:apiVersion}/reptile/shedding", async (SheddingEvent sheddingEvent,
             [FromServices] SheddingService sheddingService, IOutputCacheStore cache, CancellationToken ct) =>
         {
-            var result = sheddingService.AddSheddingEvent(sheddingEvent);
+            var result = sheddingService.AddSheddingEvent(sheddingEvent, ct);
             await cache.EvictByTagAsync("sheeding",ct);
             return result;
         }).RequireAuthorization();
@@ -185,7 +189,7 @@ public static class EndpointExtensions
         app.MapPut("api/v{version:apiVersion}/reptile/shedding", async (SheddingEvent sheddingEvent,
             [FromServices] SheddingService sheddingService, IOutputCacheStore cache, CancellationToken ct) =>
         {
-            var result = sheddingService.UpdateSheddingEvent(sheddingEvent);
+            var result = await sheddingService.UpdateSheddingEvent(sheddingEvent, ct);
             await cache.EvictByTagAsync("sheeding", ct);
             return result;
         }).RequireAuthorization();
@@ -242,7 +246,7 @@ public static class EndpointExtensions
             IOutputCacheStore cache,
             CancellationToken ct) =>
         {
-            var result = sheddingService.DeleteSheddingEvent(sheddingId);
+            var result = await sheddingService.DeleteSheddingEvent(sheddingId, ct);
             await cache.EvictByTagAsync("shedding", ct);
             return result;
         }).RequireAuthorization();

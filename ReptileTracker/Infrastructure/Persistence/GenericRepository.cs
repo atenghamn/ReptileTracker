@@ -39,9 +39,10 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return _dbSet.Find(id);
     }
 
-    public Task<TEntity?> AddAsync(TEntity entity)
+    public async Task<TEntity?> AddAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        await _dbSet.AddAsync(entity);
+        return entity;
     }
 
     public TEntity? Add(TEntity entity)
@@ -49,17 +50,19 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _dbSet.Add(entity);
         return entity;
     }
-    
+
     public void Update(TEntity entity)
     {
         _dbSet.Attach(entity);
         _context.Entry(entity).State = EntityState.Modified;
     }
 
+
     public void Delete(TEntity entity)
     {
         _dbSet.Remove(entity);
     }
+
 
     public void Save()
     {
@@ -68,6 +71,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<int> SaveAsync(CancellationToken ct)
     {
-       return await _context.SaveChangesAsync(ct);
+        return await _context.SaveChangesAsync(ct);
     }
 }
