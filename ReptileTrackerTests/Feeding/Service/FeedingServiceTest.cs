@@ -4,6 +4,7 @@ using ReptileTracker.Feeding.Errors;
 using ReptileTracker.Feeding.Model;
 using ReptileTracker.Feeding.Service;
 using ReptileTracker.Infrastructure.Persistence;
+using System.Runtime.CompilerServices;
 
 namespace ReptileTrackerTests.Feeding.Service;
 
@@ -28,14 +29,14 @@ public class FeedingServiceTest
             Notes = "Feeding notes"
         };
         _feedingService = new FeedingService(_mockedFeedingRepository);
-        _mockedFeedingRepository.GetById(1).Returns(_feedingEvent);
+        _mockedFeedingRepository.GetByIdAsync(1, new CancellationToken()).Returns(_feedingEvent);
 
     }
 
     [Test]
-    public void WhenFeedingEventOccurs_WithCorrectValues_ReturnSuccessResult()
+    public async Task WhenFeedingEventOccurs_WithCorrectValues_ReturnSuccessResult()
     {
-        var result = _feedingService.AddFeedingEvent(_feedingEvent);
+        var result = await _feedingService.AddFeedingEvent(_feedingEvent, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -44,9 +45,9 @@ public class FeedingServiceTest
     }
 
     [Test]
-    public void GetFeedingEventById_WithCorrectId_ReturnSuccessResult()
+    public async Task GetFeedingEventById_WithCorrectId_ReturnSuccessResult()
     {
-        var result = _feedingService.GetFeedingEventById(1);
+        var result = await _feedingService.GetFeedingEventById(1, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -56,9 +57,9 @@ public class FeedingServiceTest
     }
 
     [Test]
-    public void GetFeedingEventById_WithIncorrectId_ReturnsError()
+    public async Task GetFeedingEventById_WithIncorrectId_ReturnsError()
     {
-        var result = _feedingService.GetFeedingEventById(100);
+        var result = await _feedingService.GetFeedingEventById(100, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(false));
@@ -67,9 +68,9 @@ public class FeedingServiceTest
     }
 
     [Test]
-    public void DeleteFeedingEvent_WithCorretId_ReturnSuccessResult()
+    public async Task DeleteFeedingEvent_WithCorretId_ReturnSuccessResult()
     {
-        var result = _feedingService.DeleteFeedingEvent(1);
+        var result = await _feedingService.DeleteFeedingEvent(1, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -78,9 +79,9 @@ public class FeedingServiceTest
     }
 
     [Test]
-    public void DeleteFeedingEvent_WithIncorrectId_ReturnsError()
+    public async Task DeleteFeedingEvent_WithIncorrectId_ReturnsError()
     {
-        var result = _feedingService.DeleteFeedingEvent(100);
+        var result = await _feedingService.DeleteFeedingEvent(100, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(false));
@@ -89,9 +90,9 @@ public class FeedingServiceTest
     }
 
     [Test]
-    public void UpdateExistingFeedingEvent_ReturnsSuccess()
+    public async Task UpdateExistingFeedingEvent_ReturnsSuccess()
     {
-        var result = _feedingService.UpdateFeedingEvent(_feedingEvent);
+        var result = await _feedingService.UpdateFeedingEvent(_feedingEvent, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -100,9 +101,9 @@ public class FeedingServiceTest
     }
 
     [Test]
-    public void UpdateNonExistingFeedingEvent_ReturnsError()
+    public async Task UpdateNonExistingFeedingEvent_ReturnsError()
     {
-        var result = _feedingService.UpdateFeedingEvent(null);
+        var result = await _feedingService.UpdateFeedingEvent(null, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(false));
@@ -111,7 +112,7 @@ public class FeedingServiceTest
     }
 
     [Test]
-    public void GetFeedingEvents_WithValidData_ReturnsSuccess()
+    public async Task GetFeedingEvents_WithValidData_ReturnsSuccess()
     {
         var feedingEvents = new List<FeedingEvent>()
         {
@@ -136,7 +137,7 @@ public class FeedingServiceTest
         };
         _mockedFeedingRepository.GetAllForReptile(1).Returns(feedingEvents);
 
-        var result = _feedingService.GetFeedingEvents(1);
+        var result = await _feedingService.GetFeedingEvents(1, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -146,9 +147,9 @@ public class FeedingServiceTest
     }
 
     [Test]
-    public void GetFeedingEvents_WithInvalidData_ReturnsError()
+    public async Task GetFeedingEvents_WithInvalidData_ReturnsError()
     {
-        var result = _feedingService.GetFeedingEvents(2);
+        var result = await _feedingService.GetFeedingEvents(2, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));

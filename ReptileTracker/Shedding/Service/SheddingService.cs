@@ -18,7 +18,7 @@ public sealed class SheddingService(ISheddingRepository sheddingRepository) : IS
     {
         try
         {
-            await sheddingRepository.AddAsync(sheddingEvent);
+            await sheddingRepository.AddAsync(sheddingEvent, ct);
             await sheddingRepository.SaveAsync(ct);
             Log.Logger.Debug("Added shedding event to reptile {ReptileId}",sheddingEvent.ReptileId);
             return Result<SheddingEvent>.Success(sheddingEvent);

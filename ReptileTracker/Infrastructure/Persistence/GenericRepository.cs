@@ -39,9 +39,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return _dbSet.Find(id);
     }
 
-    public async Task<TEntity?> AddAsync(TEntity entity)
+    public async Task<TEntity?> AddAsync(TEntity entity, CancellationToken ct)
     {
-        await _dbSet.AddAsync(entity);
+        await _dbSet.AddAsync(entity, ct);
         return entity;
     }
 

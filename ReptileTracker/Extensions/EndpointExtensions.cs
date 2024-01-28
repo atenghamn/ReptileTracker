@@ -51,15 +51,16 @@ public static class EndpointExtensions
             [FromRoute] int eventId,
             CancellationToken ct) =>
         {
-            var result = feedingService.GetFeedingEventById(eventId);
+            var result = feedingService.GetFeedingEventById(eventId, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("feeding"));
 
         app.MapGet("api/v{version:apiVersion}/reptile/feeding/list/{reptileId:int}", (
             [FromServices] FeedingService feedingService,
-            [FromRoute] int reptileId) =>
+            [FromRoute] int reptileId,
+            CancellationToken ct) =>
         {
-            var result = feedingService.GetFeedingEvents(reptileId);
+            var result = feedingService.GetFeedingEvents(reptileId, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("feeding"));
 
@@ -122,10 +123,14 @@ public static class EndpointExtensions
             .ReportApiVersions()
             .Build();
 
-        app.MapPost("api/v{version:apiVersion}/reptile/feeding", async (FeedingEvent feedingEvent, 
-            [FromServices]FeedingService feedingService, IOutputCacheStore cache, CancellationToken ct) =>
+        app.MapPost("api/v{version:apiVersion}/reptile/feeding", async (
+            FeedingEvent feedingEvent, 
+            [FromServices]FeedingService feedingService, 
+            IOutputCacheStore cache, 
+            CancellationToken ct
+            ) =>
         {
-            var result = feedingService.AddFeedingEvent(feedingEvent);
+            var result = feedingService.AddFeedingEvent(feedingEvent, ct);
             await cache.EvictByTagAsync("feeding", ct);
             return result;
         }).RequireAuthorization();
@@ -178,10 +183,13 @@ public static class EndpointExtensions
             .ReportApiVersions()
             .Build();
 
-        app.MapPut("api/v{version:apiVersion}/reptile/feeding", async (FeedingEvent feedingEvent, 
-            [FromServices]FeedingService feedingService, IOutputCacheStore cache, CancellationToken ct) =>
+        app.MapPut("api/v{version:apiVersion}/reptile/feeding", async (
+            FeedingEvent feedingEvent, 
+            [FromServices]FeedingService feedingService, 
+            IOutputCacheStore cache, 
+            CancellationToken ct) =>
         {
-            var result = feedingService.UpdateFeedingEvent(feedingEvent);
+            var result = feedingService.UpdateFeedingEvent(feedingEvent, ct);
             await cache.EvictByTagAsync("feeding", ct);
             return result;
         }).RequireAuthorization();
@@ -234,7 +242,7 @@ public static class EndpointExtensions
                 IOutputCacheStore cache, 
                 CancellationToken ct) =>
             {
-                var result = feedingService.DeleteFeedingEvent(feedingId);
+                var result = feedingService.DeleteFeedingEvent(feedingId, ct);
                 await cache.EvictByTagAsync("feeding", ct);
                 return result;
             }

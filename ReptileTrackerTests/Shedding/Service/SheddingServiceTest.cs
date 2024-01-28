@@ -65,7 +65,7 @@ public class SheddingServiceTest
     public async Task AddSheddingEvent_ShouldReturnSuccessResult_WhenValidSheddingEventIsProvided()
     {
         var sheddingEvent = new SheddingEvent() { Id = 2, ReptileId = 1, Date = DateTime.Now, Notes = "New shedding event" };
-        _mockedSheddingRepository.AddAsync(Arg.Any<SheddingEvent>()).Returns(sheddingEvent);
+        _mockedSheddingRepository.AddAsync(Arg.Any<SheddingEvent>(), new CancellationToken()).Returns(sheddingEvent);
         var result = await _sheddingService.AddSheddingEvent(sheddingEvent, new CancellationToken());
         
         Assert.Multiple(() =>
