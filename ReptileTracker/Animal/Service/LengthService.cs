@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ReptileTracker.Animal.Errors;
 using ReptileTracker.Animal.Model;
@@ -13,12 +14,12 @@ namespace ReptileTracker.Animal.Service;
 
 public sealed class LengthService(ILengthRepository lengthRepository) : ILengthService
 {
-    public Result<Length> AddLength(Length length)
+    public async Task<Result<Length>> AddLength(Length length, CancellationToken ct)
     {
         try
         {
-            lengthRepository.Add(length);
-            lengthRepository.Save();
+            await lengthRepository.AddAsync(length, ct);
+            await lengthRepository.SaveAsync(ct);
             Log.Logger.Debug("Added new length measurement to reptile {LengthReptileId}", length.ReptileId);
             return Result<Length>.Success(length);
         }
@@ -29,22 +30,22 @@ public sealed class LengthService(ILengthRepository lengthRepository) : ILengthS
         }
     }
 
-    public Result<Length> GetLengthById(int lengthId)
+    public async Task<Result<Length>> GetLengthById(int lengthId, CancellationToken ct)
     {
-        var entity = lengthRepository.GetById(lengthId);
+        var entity = await lengthRepository.GetByIdAsync(lengthId, ct);
         return entity == null
             ? Result<Length>.Failure(LengthErrors.NotFound)
             : Result<Length>.Success(entity);
     }
 
-    public Result<Length> DeleteLength(int lengthId)
+    public async Task<Result<Length>> DeleteLength(int lengthId, CancellationToken ct)
     {
         try
         {
-            var entity = GetLengthById(lengthId);
+            var entity = await GetLengthById(lengthId, ct);
             if (entity.Data == null) return Result<Length>.Failure(LengthErrors.NotFound);
             lengthRepository.Delete(entity.Data);
-            lengthRepository.Save();
+            await lengthRepository.SaveAsync(ct);
             Log.Logger.Debug("Deleted length measurement to reptile {LengthReptileId}", lengthId);
             return Result<Length>.Success();
         }
@@ -55,14 +56,14 @@ public sealed class LengthService(ILengthRepository lengthRepository) : ILengthS
         }
     }
 
-    public Result<Length> UpdateLength(Length length)
+    public async Task<Result<Length>> UpdateLength(Length length, CancellationToken ct)
     {
         try
         {
-            var entity = GetLengthById(length.Id);
+            var entity = await GetLengthById(length.Id, ct);
             if (entity.Data == null) return Result<Length>.Failure(LengthErrors.NotFound);
             lengthRepository.Update(length);
-            lengthRepository.Save();
+            await lengthRepository.SaveAsync(ct);
             Log.Logger.Debug("Updated length measurement to reptile {LengthReptileId}", length.ReptileId);
             return Result<Length>.Success(length);
         }
@@ -73,11 +74,11 @@ public sealed class LengthService(ILengthRepository lengthRepository) : ILengthS
         }
     }
 
-    public async Task<Result<List<Length>>> GetLengths(int reptileId)
+    public async Task<Result<List<Length>>> GetLengths(int reptileId, CancellationToken ct)
     {
         try
         {
-            var entities = lengthRepository.GetAllForReptile(reptileId).Result;
+            var entities = await lengthRepository.GetAllForReptile(reptileId);
             var list = entities.ToList();
             return list.Count < 1 ? Result<List<Length>>.Failure(LengthErrors.NoLengthHistory) : Result<List<Length>>.Success(list);
         }
