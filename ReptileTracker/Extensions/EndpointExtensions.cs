@@ -51,7 +51,7 @@ public static class EndpointExtensions
             [FromRoute] int eventId,
             CancellationToken ct) =>
         {
-            var result = feedingService.GetFeedingEventById(eventId, ct);
+            var result = await feedingService.GetFeedingEventById(eventId, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("feeding"));
 
@@ -64,19 +64,21 @@ public static class EndpointExtensions
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("feeding"));
 
-        app.MapGet("api/v{version:apiVersion}/reptile/weight/{eventId:int}", (
+        app.MapGet("api/v{version:apiVersion}/reptile/weight/{eventId:int}", async (
             [FromServices] WeightService weightService,
-            [FromRoute] int eventId) =>
+            [FromRoute] int eventId,
+            CancellationToken ct) =>
         {
-            var result = weightService.GetWeightById(eventId);
+            var result = await weightService.GetWeightById(eventId, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("weight"));
 
-        app.MapGet("api/v{version:apiVersion}/reptile/weight/list/{reptileId:int}", (
+        app.MapGet("api/v{version:apiVersion}/reptile/weight/list/{reptileId:int}", async (
             [FromServices] WeightService weigthService,
-            [FromRoute] int reptileId) =>
+            [FromRoute] int reptileId,
+            CancellationToken ct) =>
         {
-            var result = weigthService.GetWeights(reptileId);
+            var result = await weigthService.GetWeights(reptileId, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("weight"));
         
@@ -98,19 +100,21 @@ public static class EndpointExtensions
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("length"));
 
-        app.MapGet("api/v{version:apiVersion}/reptile/{reptileId:int}", (
+        app.MapGet("api/v{version:apiVersion}/reptile/{reptileId:int}", async (
             [FromServices] ReptileService reptileService,
-            [FromRoute] int reptileId) =>
+            [FromRoute] int reptileId,
+            CancellationToken ct) =>
         {
-            var result = reptileService.GetReptileById(reptileId);
+            var result = await reptileService.GetReptileById(reptileId, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("reptile"));
 
-        app.MapGet("api/v{version:apiVersion}/reptile/list/{username}", (
+        app.MapGet("api/v{version:apiVersion}/reptile/list/{username}", async (
             [FromServices] ReptileService reptileService,
-            [FromRoute] string username) =>
+            [FromRoute] string username,
+            CancellationToken ct) =>
         {
-            var result = reptileService.GetReptilesByAccount(username);
+            var result = await reptileService.GetReptilesByAccount(username, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("reptile"));
         
@@ -165,7 +169,7 @@ public static class EndpointExtensions
             IOutputCacheStore cache, 
             CancellationToken ct) =>
         {
-            var result = weightService.AddWeight(weigthMeasurement);
+            var result = await weightService.AddWeight(weigthMeasurement, ct);
             await cache.EvictByTagAsync("weight", ct);
             return result;
         }).RequireAuthorization();
@@ -180,12 +184,13 @@ public static class EndpointExtensions
             IOutputCacheStore cache, 
             CancellationToken ct) =>
         {
-            var result = reptileService.CreateReptile(
+            var result = await reptileService.CreateReptile(
                 name: name,
                 species: species,
                 birthdate: birthdate,
                 type: type,
-                username: user.Identity.Name);
+                username: user.Identity.Name,
+                ct);
 
             await cache.EvictByTagAsync("reptile", ct);
 
@@ -240,7 +245,7 @@ public static class EndpointExtensions
             IOutputCacheStore cache, 
             CancellationToken ct) =>
         {
-            var result = weightService.UpdateWeight(weightMeasurement);
+            var result = await weightService.UpdateWeight(weightMeasurement, ct);
             await cache.EvictByTagAsync("weight", ct);
             return result;
         }).RequireAuthorization();
@@ -251,7 +256,7 @@ public static class EndpointExtensions
             IOutputCacheStore cache, 
             CancellationToken ct) =>
         {
-            var result = reptileService.UpdateReptile(reptile);
+            var result = await reptileService.UpdateReptile(reptile, ct);
             await cache.EvictByTagAsync("reptile", ct);
             return result;
         }).RequireAuthorization();
@@ -306,7 +311,7 @@ public static class EndpointExtensions
             IOutputCacheStore cache,
             CancellationToken ct) =>
         {
-            var result = weightService.DeleteWeight(weightId);
+            var result = await weightService.DeleteWeight(weightId, ct);
             await cache.EvictByTagAsync("weight", ct);
             return result;
         }).RequireAuthorization();
@@ -317,7 +322,7 @@ public static class EndpointExtensions
             IOutputCacheStore cache,
             CancellationToken ct) =>
         {
-            var result = reptileService.DeleteReptile(reptileId);
+            var result = await reptileService.DeleteReptile(reptileId, ct);
             await cache.EvictByTagAsync("reptile", ct);
             return result;
         }).RequireAuthorization();
