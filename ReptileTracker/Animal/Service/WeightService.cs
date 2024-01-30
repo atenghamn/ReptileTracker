@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ReptileTracker.Animal.Errors;
 using ReptileTracker.Animal.Model;
@@ -12,12 +13,12 @@ namespace ReptileTracker.Animal.Service;
 
 public sealed class WeightService(IWeightRepository weightRepository) : IWeightService
 {
-    public Result<Weight> AddWeight(Weight weight)
+    public async Task<Result<Weight>> AddWeight(Weight weight, CancellationToken ct)
     {
         try
         {
-            weightRepository.Add(weight);
-            weightRepository.Save();
+            await weightRepository.AddAsync(weight, ct);
+            await weightRepository.SaveAsync(ct);
             Log.Logger.Debug("Added new weight measurement to reptile {WeightReptileId}", weight.ReptileId);
             return Result<Weight>.Success(weight);
         }
@@ -29,22 +30,22 @@ public sealed class WeightService(IWeightRepository weightRepository) : IWeightS
         }
     }
 
-    public Result<Weight> GetWeightById(int weightId)
+    public async Task<Result<Weight>> GetWeightById(int weightId, CancellationToken ct)
     {
-        var entity = weightRepository.GetById(weightId);
+        var entity = await weightRepository.GetByIdAsync(weightId, ct);
         return entity == null
             ? Result<Weight>.Failure(WeightErrors.NotFound)
             : Result<Weight>.Success(entity);
     }
 
-    public Result<Weight> DeleteWeight(int weightId)
+    public async Task<Result<Weight>> DeleteWeight(int weightId, CancellationToken ct)
     {
         try
         {
-            var entity = GetWeightById(weightId);
+            var entity = await GetWeightById(weightId, ct);
             if (entity.Data == null) return Result<Weight>.Failure(WeightErrors.NotFound);
             weightRepository.Delete(entity.Data);
-            weightRepository.Save();
+            await weightRepository.SaveAsync(ct);
             Log.Logger.Debug("Deleted weight measurement for reptile {WeightReptileId}", weightId);
             return Result<Weight>.Success();
         }
@@ -55,14 +56,14 @@ public sealed class WeightService(IWeightRepository weightRepository) : IWeightS
         }
     }
 
-    public Result<Weight> UpdateWeight(Weight weight)
+    public async Task<Result<Weight>> UpdateWeight(Weight weight, CancellationToken ct)
     {
         try
         {
-            var entity = GetWeightById(weight.Id);
+            var entity = await GetWeightById(weight.Id, ct);
             if (entity.Data == null) return Result<Weight>.Failure(WeightErrors.NotFound);
             weightRepository.Update(weight);
-            weightRepository.Save();
+            await weightRepository.SaveAsync(ct);
             Log.Logger.Debug("Failed to update weight measurement to reptile {WeightReptileId}", weight.ReptileId);
             return Result<Weight>.Success(weight);
         }
@@ -73,11 +74,11 @@ public sealed class WeightService(IWeightRepository weightRepository) : IWeightS
         }
     }
 
-    public async Task<Result<List<Weight>>> GetWeights(int reptileId)
+    public async Task<Result<List<Weight>>> GetWeights(int reptileId, CancellationToken ct)
     {
         try
         {
-            var entities = weightRepository.GetAllForReptile(reptileId).Result;
+            var entities = await weightRepository.GetAllForReptile(reptileId, ct);
             var list = entities.ToList();
             return list.Count < 1 ? Result<List<Weight>>.Failure(WeightErrors.NoWeightHistory) : Result<List<Weight>>.Success(list);
         }

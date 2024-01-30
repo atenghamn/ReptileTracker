@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ReptileTracker.Commons;
 using ReptileTracker.Feeding.Errors;
 using ReptileTracker.Feeding.Model;
@@ -12,20 +14,20 @@ namespace ReptileTracker.Feeding.Service;
 
 public sealed class FeedingService(IFeedingRepository feedingRepository) : IFeedingService
 {
-    public Result<FeedingEvent> GetFeedingEventById(int feedingId)
+    public async Task<Result<FeedingEvent>> GetFeedingEventById(int feedingId, CancellationToken ct)
     {
-        var entity = feedingRepository.GetById(feedingId);
+        var entity = await feedingRepository.GetByIdAsync(feedingId, ct);
         return entity == null
             ? Result<FeedingEvent>.Failure(FeedingErrors.NotFound)
             : Result<FeedingEvent>.Success(entity);
     }
 
-    public Result<FeedingEvent> AddFeedingEvent(FeedingEvent feedingEvent)
+    public async Task<Result<FeedingEvent>> AddFeedingEvent(FeedingEvent feedingEvent, CancellationToken ct)
     {
         try
         {
-            feedingRepository.Add(feedingEvent);
-            feedingRepository.Save();
+            await feedingRepository.AddAsync(feedingEvent, ct);
+            await feedingRepository.SaveAsync(ct);
             Log.Logger.Debug("Added new feeding event to reptile {ReptileId}", feedingEvent.ReptileId);
             return Result<FeedingEvent>.Success(feedingEvent);
         }
@@ -36,14 +38,14 @@ public sealed class FeedingService(IFeedingRepository feedingRepository) : IFeed
         }
     }
 
-    public Result<FeedingEvent> DeleteFeedingEvent(int id)
+    public async Task<Result<FeedingEvent>> DeleteFeedingEvent(int id, CancellationToken ct)
     {
         try
         {
-            var entity = GetFeedingEventById(id);
+            var entity = await GetFeedingEventById(id, ct);
             if (entity.Data == null) return Result<FeedingEvent>.Failure(FeedingErrors.NotFound);
             feedingRepository.Delete(entity.Data);
-            feedingRepository.Save();
+            await feedingRepository.SaveAsync(ct);
             Log.Logger.Debug("Deleted feeding event with id {FeedingId}", id);
             return Result<FeedingEvent>.Success();
         }
@@ -54,14 +56,14 @@ public sealed class FeedingService(IFeedingRepository feedingRepository) : IFeed
         }
     }
 
-    public Result<FeedingEvent> UpdateFeedingEvent(FeedingEvent feedingEvent)
+    public async Task<Result<FeedingEvent>> UpdateFeedingEvent(FeedingEvent feedingEvent, CancellationToken ct)
     {
         try
         {
-            var entity = GetFeedingEventById(feedingEvent.Id);
+            var entity = await GetFeedingEventById(feedingEvent.Id, ct);
             if (entity.Data == null) return Result<FeedingEvent>.Failure(FeedingErrors.NotFound);
             feedingRepository.Update(feedingEvent);
-            feedingRepository.Save();
+            await feedingRepository.SaveAsync(ct);
             Log.Logger.Debug("Updated feeding event to reptile {ReptileId}", feedingEvent.ReptileId);
             return Result<FeedingEvent>.Success(feedingEvent);
         }
@@ -72,11 +74,11 @@ public sealed class FeedingService(IFeedingRepository feedingRepository) : IFeed
         }
     }
 
-    public Result<List<FeedingEvent>> GetFeedingEvents(int repitleId)
+    public async Task<Result<List<FeedingEvent>>> GetFeedingEvents(int repitleId, CancellationToken ct)
     {
         try
         {
-            var entities = feedingRepository.GetAllForReptile(repitleId).Result;
+            var entities = await feedingRepository.GetAllForReptile(repitleId);
             var list = entities.ToList();
             return list.Count < 1 ? Result<List<FeedingEvent>>.Failure(FeedingErrors.NoFeedingHistory) : Result<List<FeedingEvent>>.Success(list);
         }

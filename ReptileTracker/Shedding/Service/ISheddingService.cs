@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using ReptileTracker.Commons;
 using ReptileTracker.Shedding.Model;
 
@@ -6,9 +8,9 @@ namespace ReptileTracker.Shedding.Service;
 
 public interface ISheddingService
 {
-    Result<SheddingEvent> AddSheddingEvent(SheddingEvent sheddingEvent);
-    Result<SheddingEvent> GetSheddingEventById(int SheddingEventId);
-    Result<SheddingEvent> DeleteSheddingEvent(int SheddingEventId);
-    Result<SheddingEvent> UpdateSheddingEvent(SheddingEvent SheddingEvent);
-    Result<List<SheddingEvent>> GetSheddingEvents(int reptileId);
+    Task<Result<SheddingEvent>> AddSheddingEvent(SheddingEvent sheddingEvent, CancellationToken ct);
+    Task<Result<SheddingEvent>> GetSheddingEventById(int SheddingEventId, CancellationToken ct);
+    Task<Result<SheddingEvent>> DeleteSheddingEvent(int SheddingEventId, CancellationToken ct);
+    Task<Result<SheddingEvent>> UpdateSheddingEvent(SheddingEvent SheddingEvent, CancellationToken ct);
+    Task<Result<List<SheddingEvent>>> GetSheddingEvents(int reptileId, CancellationToken ct);
 }
