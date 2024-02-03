@@ -1,0 +1,19 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ReptileTracker/FileContentIndex
+/.vs/ReptileTracker/v17/TestStore/0
+/.vs/ReptileTracker/v17
+/ReptileTrackerTests/bin/Debug/net8.0
+/ReptileTrackerTests/obj/Debug/net8.0
+/ReptileTracker/obj/project.nuget.cache
+/ReptileTracker/obj/ReptileTracker.csproj.nuget.dgspec.json
+/ReptileTracker/obj/ReptileTracker.csproj.nuget.g.props
+/ReptileTracker/obj/ReptileTracker.csproj.nuget.g.targets
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.AssemblyInfo.cs
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.AssemblyInfoInputs.cache
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.assets.cache
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.csproj.AssemblyReference.cache
+/ReptileTracker/obj/Debug/net8.0/ReptileTracker.GeneratedMSBuildEditorConfig.editorconfig
+/ReptileTracker/obj/project.assets.json
