@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Identity.Client;
 using ReptileTracker.Animal.Errors;
@@ -13,11 +14,11 @@ namespace ReptileTracker.Animal.Service;
 
 public sealed class ReptileService(IReptileRepository reptileRepository, IAccountRepository accountRepository) : IReptileService
 {
-    public Result<Reptile> CreateReptile(string name, string species, DateTime birthdate, ReptileType type, string username)
+    public async Task<Result<Reptile>> CreateReptile(string name, string species, DateTime birthdate, ReptileType type, string username, CancellationToken ct)
     {
         try
         {
-            var account =  accountRepository.GetByUsername(username).Result;
+            var account = await accountRepository.GetByUsername(username, ct);
             var accountId = account.Id;
             var reptile = new Reptile()
             {
@@ -27,8 +28,8 @@ public sealed class ReptileService(IReptileRepository reptileRepository, IAccoun
                 ReptileType = type,
                 AccountId = accountId
             };
-            reptileRepository.Add(reptile);
-            reptileRepository.Save();
+            await reptileRepository.AddAsync(reptile, ct);
+            await reptileRepository.SaveAsync(ct);
             
             Log.Logger.Debug("Added reptile {Name} to account {AccountId} ", name, accountId);
             return Result<Reptile>.Success(reptile);
@@ -41,14 +42,14 @@ public sealed class ReptileService(IReptileRepository reptileRepository, IAccoun
         }
     }
 
-    public Result<Reptile> UpdateReptile(Reptile entity)
+    public async Task<Result<Reptile>> UpdateReptile(Reptile entity, CancellationToken ct)
     {
         try
         {
-            var newEntity = reptileRepository.GetById(entity.Id);
+            var newEntity = await reptileRepository.GetByIdAsync(entity.Id, ct);
             if (newEntity == null) return Result<Reptile>.Failure(ReptileErrors.NotFound);
             reptileRepository.Update(newEntity);
-            reptileRepository.Save();
+            await reptileRepository.SaveAsync(ct);
             Log.Logger.Debug("Updated reptile {Name} to account {AccountId} ",newEntity.Name, newEntity.Id);
 
             return Result<Reptile>.Success(newEntity);
@@ -61,22 +62,22 @@ public sealed class ReptileService(IReptileRepository reptileRepository, IAccoun
         }
     }
 
-    public Result<Reptile> GetReptileById(int id)
+    public async Task<Result<Reptile>> GetReptileById(int id, CancellationToken ct)
     {
-        var entity = reptileRepository.GetById(id);
+        var entity = await reptileRepository.GetByIdAsync(id, ct);
         return entity == null
             ? Result<Reptile>.Failure(ReptileErrors.NotFound)
             : Result<Reptile>.Success(entity);
     }
 
-    public Result<Reptile> DeleteReptile(int id)
+    public async Task<Result<Reptile>> DeleteReptile(int id, CancellationToken ct)
     {
         try
         {
-            var entity = GetReptileById(id);
+            var entity = await GetReptileById(id, ct);
             if (entity.Data == null) return Result<Reptile>.Failure(ReptileErrors.NotFound);
             reptileRepository.Delete(entity.Data);
-            reptileRepository.Save();
+            await reptileRepository.SaveAsync(ct);
             Log.Logger.Debug("Removed reptile {ReptileId} ", id);
 
             return Result<Reptile>.Success();
@@ -89,19 +90,19 @@ public sealed class ReptileService(IReptileRepository reptileRepository, IAccoun
         }
     }
 
-    public async Task<Result<List<Reptile>>> GetReptilesByAccount(string username)
+    public async Task<Result<List<Reptile?>>> GetReptilesByAccount(string username, CancellationToken ct)
     {
         try
         {
-            var account = accountRepository.GetByUsername(username).Result;
-            var reptiles = await reptileRepository.GetByAccount(account.Id);
+            var account = await accountRepository.GetByUsername(username, ct);
+            var reptiles = await reptileRepository.GetByAccount(account.Id, ct);
             return reptiles is not null
-                ? Result<List<Reptile>>.Success(reptiles.ToList())
-                : Result<List<Reptile>>.Failure(ReptileErrors.DidntFindReptiles);
+                ? Result<List<Reptile?>>.Success(reptiles.ToList())
+                : Result<List<Reptile?>>.Failure(ReptileErrors.DidntFindReptiles);
         }
         catch (Exception ex)
         {
-            return Result<List<Reptile>>.Failure(ReptileErrors.NotFound);
+            return Result<List<Reptile?>>.Failure(ReptileErrors.NotFound);
         }
     }
 }

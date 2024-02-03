@@ -1,0 +1,15 @@
+﻿version: '3'
+services:
+  reptile_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=zoeyRuleThemAll1337
+      - TZ=Europe/Stockholm
+    ports:
+      - 1433:1433
+    volumes:
+        - ./mssql/data:/var/opt/mssql/data
+        - ./mssql/log:/var/opt/mssql/log
+    restart: unless-stopped
+    container_name: ReptileDB

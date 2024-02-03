@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReptileTracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90431a5c123735282a875a43e1dd35d5f31915fe")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bedecca7b26614582548bb8cc56fd62e58f7899b")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReptileTracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReptileTracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -19,14 +19,14 @@ public class WeightServiceTests
     {
         _weightService = new WeightService(_mockedWeigthRepository);
         _weigth = new Weight() { ReptileId = 1, Id = 1, Weighing = 10, WeighingDate = DateTime.Now };
-        _mockedWeigthRepository.GetById(1).Returns(_weigth);
+        _mockedWeigthRepository.GetByIdAsync(1, new CancellationToken()).Returns(_weigth);
     }
     
     [Test]
-    public void GetById_ShouldReturnWeigth_WhenValidIdIsProvided()
+    public async Task GetById_ShouldReturnWeigth_WhenValidIdIsProvided()
     {
         const int id = 1;
-        var result = _weightService.GetWeightById(id);
+        var result = await _weightService.GetWeightById(id, new CancellationToken());
 
         Assert.Multiple(() =>
         {
@@ -37,10 +37,10 @@ public class WeightServiceTests
     }
 
     [Test]
-    public void GetById_ShouldReturnErrorResult_WhenInvalidIdIsProvided()
+    public async Task GetById_ShouldReturnErrorResult_WhenInvalidIdIsProvided()
     {
         const int id = 2;
-        var result = _weightService.GetWeightById(id);
+        var result = await _weightService.GetWeightById(id, new CancellationToken());
         
         Assert.Multiple(() =>
         {
@@ -50,10 +50,11 @@ public class WeightServiceTests
     }
     
     [Test]
-    public void AddWeightEvent_ShouldReturnSuccessResult_WhenValidWeightEventIsProvided()
+    public async Task AddWeightEvent_ShouldReturnSuccessResult_WhenValidWeightEventIsProvided()
     {
-        _mockedWeigthRepository.Add(_weigth).Returns(_weigth);
-        var result = _weightService.AddWeight(_weigth);
+        var ct = new CancellationToken();
+        _mockedWeigthRepository.AddAsync(_weigth, ct).Returns(_weigth);
+        var result = await _weightService.AddWeight(_weigth, ct);
         
         Assert.Multiple(() =>
         {
@@ -64,9 +65,9 @@ public class WeightServiceTests
     }
     
         [Test]
-    public void DeleteWeigthEvent_WithCorrectId_ReturnsSuccessResult()
+    public async Task DeleteWeigthEvent_WithCorrectId_ReturnsSuccessResult()
     {
-        var result = _weightService.DeleteWeight(1);
+        var result = await _weightService.DeleteWeight(1, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -75,9 +76,9 @@ public class WeightServiceTests
     }
 
     [Test]
-    public void DeleteWeigthEvent_WithIncorrectId_ReturnsErrorResult()
+    public async Task DeleteWeigthEvent_WithIncorrectId_ReturnsErrorResult()
     {
-        var result = _weightService.DeleteWeight(2);
+        var result = await _weightService.DeleteWeight(2, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
@@ -86,11 +87,12 @@ public class WeightServiceTests
     }
 
     [Test]
-    public void UpdateExistingWeigthEvent_ReturnsSuccess()
+    public async Task UpdateExistingWeigthEvent_ReturnsSuccess()
     {
         var updatedWeight = new Weight() { Id = 1, Weighing = 2, ReptileId = 1, WeighingDate = DateTime.Now };
-        _mockedWeigthRepository.GetById(1).Returns(updatedWeight);
-        var result = _weightService.UpdateWeight(updatedWeight);
+        var ct = new CancellationToken();
+        _mockedWeigthRepository.GetByIdAsync(1, ct).Returns(updatedWeight);
+        var result = await _weightService.UpdateWeight(updatedWeight, ct);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -100,11 +102,14 @@ public class WeightServiceTests
     }
 
     [Test]
-    public void UpdateNonExistingWeigthEvent_ReturnsErrorResponse()
+    public async Task UpdateNonExistingWeigthEvent_ReturnsErrorResponse()
     {
         var nonExistingWeight = new Weight() { Id = 2, ReptileId = 1, WeighingDate = DateTime.Now };
-        _mockedWeigthRepository.GetById(2).Returns((Weight)null);
-        var result = _weightService.UpdateWeight(nonExistingWeight);
+
+        var ct = new CancellationToken();
+
+        _mockedWeigthRepository.GetByIdAsync(2, ct).Returns((Weight)null);
+        var result = await _weightService.UpdateWeight(nonExistingWeight, ct);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
@@ -113,7 +118,7 @@ public class WeightServiceTests
     }
 
     [Test]
-    public void GetWeigthEvents_WithValidData_ReturnsSuccess()
+    public async Task GetWeigthEvents_WithValidData_ReturnsSuccess()
     {
         var weigthEvents = new List<Weight>()
         {
@@ -121,8 +126,10 @@ public class WeightServiceTests
             new Weight() { Id = 2, ReptileId = 2, Weighing = 11, WeighingDate = DateTime.Now.AddDays(-1) },
             new Weight() { Id = 3, ReptileId = 3, Weighing = 12, WeighingDate = DateTime.Now }
         };
-        _mockedWeigthRepository.GetAllForReptile(1).Returns(weigthEvents);
-        var result = _weightService.GetWeights(1).Result;
+
+        var ct = new CancellationToken();
+        _mockedWeigthRepository.GetAllForReptile(1, ct).Returns(weigthEvents);
+        var result = await _weightService.GetWeights(1, ct);
         
         Assert.Multiple(() =>
         {
@@ -133,11 +140,13 @@ public class WeightServiceTests
     }
 
     [Test]
-    public void GetWeightEvents_WithInvalidData_ReturnsError()
+    public async Task GetWeightEvents_WithInvalidData_ReturnsError()
     {
         var emptyWeigthEvents = new List<Weight>();
+        var ct = new CancellationToken();
+
         _mockedWeigthRepository.GetAll().Returns(emptyWeigthEvents);
-        var result = _weightService.GetWeights(2).Result;
+        var result = await _weightService.GetWeights(2, ct);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));

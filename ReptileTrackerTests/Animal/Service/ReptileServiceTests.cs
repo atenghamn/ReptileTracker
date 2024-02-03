@@ -28,7 +28,7 @@ public class ReptileServiceTests
             FirstName = "Jane",
             LastName = "Doe"
         };
-        
+
         _reptile = new Reptile()
         {
             Id = 1,
@@ -43,16 +43,16 @@ public class ReptileServiceTests
             SheddingHistory = new List<SheddingEvent>(),
         };
 
-        _mockedAccountRepository.GetByUsername("kalle@test.se").Returns(testAccount);
-        _moockedReptileRepository.GetById(1).Returns(_reptile);
+        _mockedAccountRepository.GetByUsername("kalle@test.se", new CancellationToken()).Returns(testAccount);
+        _moockedReptileRepository.GetByIdAsync(1, new CancellationToken()).Returns(_reptile);
         _reptileService = new ReptileService(_moockedReptileRepository, _mockedAccountRepository);
     }
-    
-      [Test]
-    public void GetById_ShouldReturnReptile_WhenValidIdIsProvided()
+
+    [Test]
+    public async Task GetById_ShouldReturnReptile_WhenValidIdIsProvided()
     {
         const int id = 1;
-        var result = _reptileService.GetReptileById(id);
+        var result = await _reptileService.GetReptileById(id, new CancellationToken());
 
         Assert.Multiple(() =>
         {
@@ -63,29 +63,31 @@ public class ReptileServiceTests
     }
 
     [Test]
-    public void GetById_ShouldReturnErrorResult_WhenInvalidIdIsProvided()
+    public async Task GetById_ShouldReturnErrorResult_WhenInvalidIdIsProvided()
     {
         const int id = 2;
-        var result = _reptileService.GetReptileById(id);
-        
+        var result = await _reptileService.GetReptileById(id, new CancellationToken());
+
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
             Assert.That(result.Error, Is.EqualTo(ReptileErrors.NotFound));
         });
     }
-    
+
     [Test]
-    public void AddReptile_ShouldReturnSuccessResult_WhenValidReptileDataIsProvided()
+    public async Task AddReptile_ShouldReturnSuccessResult_WhenValidReptileDataIsProvided()
     {
-        _moockedReptileRepository.Add(_reptile).Returns(_reptile);
-        var result = _reptileService.CreateReptile(
-            name: "Red", 
-            species: "Blood Python", 
-            birthdate: DateTime.Now, 
-            type: ReptileType.SNAKE, 
-            username:"kalle@test.se");
-        
+        var ct = new CancellationToken();
+        _moockedReptileRepository.AddAsync(_reptile, ct).Returns(_reptile);
+        var result = await _reptileService.CreateReptile(
+            name: "Red",
+            species: "Blood Python",
+            birthdate: DateTime.Now,
+            type: ReptileType.SNAKE,
+            username: "kalle@test.se",
+            ct: ct);
+
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -94,11 +96,11 @@ public class ReptileServiceTests
             Assert.That(result.Data.Species, Is.EqualTo("Blood Python"));
         });
     }
-    
-        [Test]
-    public void DeleteReptile_WithCorrectId_ReturnsSuccessResult()
+
+    [Test]
+    public async Task DeleteReptile_WithCorrectId_ReturnsSuccessResult()
     {
-        var result = _reptileService.DeleteReptile(1);
+        var result = await _reptileService.DeleteReptile(1, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -107,9 +109,9 @@ public class ReptileServiceTests
     }
 
     [Test]
-    public void DeleteReptileEvent_WithIncorrectId_ReturnsErrorResult()
+    public async Task DeleteReptileEvent_WithIncorrectId_ReturnsErrorResult()
     {
-        var result = _reptileService.DeleteReptile(2);
+        var result = await _reptileService.DeleteReptile(2, new CancellationToken());
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
@@ -118,7 +120,7 @@ public class ReptileServiceTests
     }
 
     [Test]
-    public void UpdateExistingReptile_ReturnsSuccess()
+    public async Task UpdateExistingReptile_ReturnsSuccess()
     {
         var updatedReptile = new Reptile()
         {
@@ -133,8 +135,11 @@ public class ReptileServiceTests
             FeedingHistory = new List<FeedingEvent>(),
             SheddingHistory = new List<SheddingEvent>(),
         };
-_moockedReptileRepository.GetById(1).Returns(updatedReptile);
-        var result = _reptileService.UpdateReptile(updatedReptile);
+
+        var ct = new CancellationToken();
+
+        _moockedReptileRepository.GetByIdAsync(1, ct).Returns(updatedReptile);
+        var result = await _reptileService.UpdateReptile(updatedReptile, ct);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -144,7 +149,7 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
     }
 
     [Test]
-    public void UpdateNonExistingReptile_ReturnsErrorResponse()
+    public async Task UpdateNonExistingReptile_ReturnsErrorResponse()
     {
         var nonExistingReptile = new Reptile()
         {
@@ -159,8 +164,11 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
             FeedingHistory = new List<FeedingEvent>(),
             SheddingHistory = new List<SheddingEvent>(),
         };
-        _moockedReptileRepository.GetById(2).Returns((Reptile)null);
-        var result = _reptileService.UpdateReptile(nonExistingReptile);
+
+        var ct = new CancellationToken();
+
+        _moockedReptileRepository.GetByIdAsync(2, ct).Returns((Reptile)null);
+        var result = await _reptileService.UpdateReptile(nonExistingReptile, ct);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
@@ -169,7 +177,7 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
     }
 
     [Test]
-    public void GetReptilesByAccount_GivenValidId_ReturnListOfReptiles()
+    public async Task GetReptilesByAccount_GivenValidId_ReturnListOfReptiles()
     {
         var reptiles = new List<Reptile>()
         {
@@ -199,10 +207,12 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
             }
         };
 
-        _moockedReptileRepository.GetByAccount("12345").Returns(reptiles);
-        _mockedAccountRepository.GetByUsername("janedoe@example.com").Returns(new Account(){Id = "12345"});
+        var ct = new CancellationToken();
 
-        var result = _reptileService.GetReptilesByAccount("janedoe@example.com").Result;
+        _moockedReptileRepository.GetByAccount("12345", ct).Returns(reptiles);
+        _mockedAccountRepository.GetByUsername("janedoe@example.com", ct).Returns(new Account() { Id = "12345" });
+
+        var result = await _reptileService.GetReptilesByAccount("janedoe@example.com", ct);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsSuccess, Is.EqualTo(true));
@@ -212,10 +222,11 @@ _moockedReptileRepository.GetById(1).Returns(updatedReptile);
     }
 
     [Test]
-    public void GetReptilesByAccount_WithInvalidId_ReturnsError()
+    public async Task GetReptilesByAccount_WithInvalidId_ReturnsError()
     {
-        _moockedReptileRepository.GetByAccount("2").Returns((Task<IEnumerable<Reptile?>>)null);
-        var result = _reptileService.GetReptilesByAccount("2").Result;
+        var ct = new CancellationToken();
+        _moockedReptileRepository.GetByAccount("2", ct).Returns((Task<IEnumerable<Reptile?>>)null);
+        var result = await _reptileService.GetReptilesByAccount("2", ct);
         Assert.Multiple(() =>
         {
             Assert.That(result.IsFailure, Is.EqualTo(true));
