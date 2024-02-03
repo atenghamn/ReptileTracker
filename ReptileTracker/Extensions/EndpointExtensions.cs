@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.OutputCaching;
 using System.Threading;
+using ReptileTracker.Account.Service;
 
 namespace ReptileTracker.Extensions;
 
@@ -25,7 +26,18 @@ public static class EndpointExtensions
             .HasApiVersion(new ApiVersion(1))
             .ReportApiVersions()
             .Build();
-       
+
+        app.MapGet("api/v{version:apiVersion}/account/info/{accountId:int}", async (
+            [FromServices] AccountService accountService,
+            [FromRoute] int accountId,
+            CancellationToken ct
+            ) =>
+        {
+            var result = await accountService.GetAccountById(accountId, ct);
+            return result;
+
+        }).RequireAuthorization().CacheOutput(x => x.Tag("accountInfo"));
+
         app.MapGet("api/v{version:apiVersion}/reptile/shedding/{sheddingEventId:int}", async (
             [FromServices] SheddingService sheddingService,
             [FromRoute] int sheddingEventId,
@@ -81,7 +93,7 @@ public static class EndpointExtensions
             var result = await weigthService.GetWeights(reptileId, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("weight"));
-        
+
         app.MapGet("api/v{version:apiVersion}/reptile/length/{eventId:int}", async (
             [FromServices] LengthService lengthService,
             [FromRoute] int eventId,
@@ -117,7 +129,7 @@ public static class EndpointExtensions
             var result = await reptileService.GetReptilesByAccount(username, ct);
             return result;
         }).RequireAuthorization().CacheOutput(x => x.Tag("reptile"));
-        
+
         return app;
     }
 
@@ -130,9 +142,9 @@ public static class EndpointExtensions
             .Build();
 
         app.MapPost("api/v{version:apiVersion}/reptile/feeding", async (
-            FeedingEvent feedingEvent, 
-            [FromServices]FeedingService feedingService, 
-            IOutputCacheStore cache, 
+            FeedingEvent feedingEvent,
+            [FromServices] FeedingService feedingService,
+            IOutputCacheStore cache,
             CancellationToken ct
             ) =>
         {
@@ -143,30 +155,30 @@ public static class EndpointExtensions
 
         app.MapPost("api/v{version:apiVersion}/reptile/shedding", async (
             SheddingEvent sheddingEvent,
-            [FromServices] SheddingService sheddingService, 
-            IOutputCacheStore cache, 
+            [FromServices] SheddingService sheddingService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = sheddingService.AddSheddingEvent(sheddingEvent, ct);
-            await cache.EvictByTagAsync("sheeding",ct);
+            await cache.EvictByTagAsync("sheeding", ct);
             return result;
         }).RequireAuthorization();
 
         app.MapPost("api/v{version:apiVersion}/reptile/length", async (
             Length lengthMeasurement,
-            [FromServices] LengthService lengthService, 
-            IOutputCacheStore cache, 
+            [FromServices] LengthService lengthService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = await lengthService.AddLength(lengthMeasurement, ct);
             await cache.EvictByTagAsync("length", ct);
             return result;
         }).RequireAuthorization();
-        
+
         app.MapPost("api/v{version:apiVersion}/reptile/weight", async (
-            Weight weigthMeasurement, 
-            [FromServices] WeightService weightService, 
-            IOutputCacheStore cache, 
+            Weight weigthMeasurement,
+            [FromServices] WeightService weightService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = await weightService.AddWeight(weigthMeasurement, ct);
@@ -175,13 +187,13 @@ public static class EndpointExtensions
         }).RequireAuthorization();
 
         app.MapPost("api/v{version:apiVersion}/reptile", async (
-            string name, 
-            string species, 
-            DateTime birthdate, 
-            ReptileType type, 
+            string name,
+            string species,
+            DateTime birthdate,
+            ReptileType type,
             ClaimsPrincipal user,
-            [FromServices] ReptileService reptileService, 
-            IOutputCacheStore cache, 
+            [FromServices] ReptileService reptileService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = await reptileService.CreateReptile(
@@ -207,9 +219,9 @@ public static class EndpointExtensions
             .Build();
 
         app.MapPut("api/v{version:apiVersion}/reptile/feeding", async (
-            FeedingEvent feedingEvent, 
-            [FromServices]FeedingService feedingService, 
-            IOutputCacheStore cache, 
+            FeedingEvent feedingEvent,
+            [FromServices] FeedingService feedingService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = feedingService.UpdateFeedingEvent(feedingEvent, ct);
@@ -219,8 +231,8 @@ public static class EndpointExtensions
 
         app.MapPut("api/v{version:apiVersion}/reptile/shedding", async (
             SheddingEvent sheddingEvent,
-            [FromServices] SheddingService sheddingService, 
-            IOutputCacheStore cache, 
+            [FromServices] SheddingService sheddingService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = await sheddingService.UpdateSheddingEvent(sheddingEvent, ct);
@@ -230,19 +242,19 @@ public static class EndpointExtensions
 
         app.MapPut("api/v{version:apiVersion}/reptile/length", async (
             Length lengthMeasurement,
-            [FromServices] LengthService lengthService, 
-            IOutputCacheStore cache, 
+            [FromServices] LengthService lengthService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
-            var result = await  lengthService.UpdateLength(lengthMeasurement, ct);
+            var result = await lengthService.UpdateLength(lengthMeasurement, ct);
             await cache.EvictByTagAsync("length", ct);
             return result;
         }).RequireAuthorization();
-        
+
         app.MapPut("api/v{version:apiVersion}/reptile/weight", async (
-            Weight weightMeasurement, 
-            [FromServices] WeightService weightService, 
-            IOutputCacheStore cache, 
+            Weight weightMeasurement,
+            [FromServices] WeightService weightService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = await weightService.UpdateWeight(weightMeasurement, ct);
@@ -252,8 +264,8 @@ public static class EndpointExtensions
 
         app.MapPut("api/v{version:apiVersion}/reptile", async (
             Reptile reptile,
-            [FromServices] ReptileService reptileService, 
-            IOutputCacheStore cache, 
+            [FromServices] ReptileService reptileService,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = await reptileService.UpdateReptile(reptile, ct);
@@ -273,8 +285,8 @@ public static class EndpointExtensions
 
         app.MapDelete("api/v{version:apiVersion}/reptile/feeding/{feedingId:int}", async (
                 [FromServices] FeedingService feedingService,
-                [FromRoute] int feedingId, 
-                IOutputCacheStore cache, 
+                [FromRoute] int feedingId,
+                IOutputCacheStore cache,
                 CancellationToken ct) =>
             {
                 var result = feedingService.DeleteFeedingEvent(feedingId, ct);
@@ -296,8 +308,8 @@ public static class EndpointExtensions
 
         app.MapDelete("api/v{version:apiVersion}/reptile/length/{lengthId:int}", async (
             [FromServices] LengthService lengthService,
-            [FromRoute] int lengthId, 
-            IOutputCacheStore cache, 
+            [FromRoute] int lengthId,
+            IOutputCacheStore cache,
             CancellationToken ct) =>
         {
             var result = await lengthService.DeleteLength(lengthId, ct);
@@ -326,10 +338,10 @@ public static class EndpointExtensions
             await cache.EvictByTagAsync("reptile", ct);
             return result;
         }).RequireAuthorization();
-        
+
         return app;
     }
-    
 
-    
+
+
 }

@@ -21,7 +21,7 @@ public class ReptileServiceTests
     [SetUp]
     public void SetUp()
     {
-        Account testAccount = new Account()
+        ReptileTracker.Account.Model.Account testAccount = new()
         {
             UserName = "testUsername",
             Email = "testEmail@test.com",
@@ -210,7 +210,7 @@ public class ReptileServiceTests
         var ct = new CancellationToken();
 
         _moockedReptileRepository.GetByAccount("12345", ct).Returns(reptiles);
-        _mockedAccountRepository.GetByUsername("janedoe@example.com", ct).Returns(new Account() { Id = "12345" });
+        _mockedAccountRepository.GetByUsername("janedoe@example.com", ct).Returns(new ReptileTracker.Account.Model.Account() { Id = "12345" });
 
         var result = await _reptileService.GetReptilesByAccount("janedoe@example.com", ct);
         Assert.Multiple(() =>
