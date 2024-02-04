@@ -7,7 +7,7 @@ namespace ReptileTracker.Account.Service
 {
     public interface IAccountService
     {
-        Task<Result<AccountDTO>> GetAccountById(int accountId, CancellationToken ct);
+        Task<Result<AccountDTO>> GetAccountById(string accountId, CancellationToken ct);
     }
 
 }

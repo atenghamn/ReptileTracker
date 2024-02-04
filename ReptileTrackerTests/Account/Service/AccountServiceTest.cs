@@ -33,9 +33,9 @@ namespace ReptileTrackerTests.Account.Service
 
             var ct = new CancellationToken();
 
-            _mockedAccountRepository.GetByIdAsync(1, ct).Returns(account);
+            _mockedAccountRepository.GetByUserId("1", ct).Returns(account);
 
-            var result = await _accountService.GetAccountById(1, ct);
+            var result = await _accountService.GetAccountById("1", ct);
 
             Assert.Multiple(() =>
             {
@@ -59,9 +59,9 @@ namespace ReptileTrackerTests.Account.Service
 
             var ct = new CancellationToken();
 
-            _mockedAccountRepository.GetByIdAsync(2, ct).Returns(account);
+            _mockedAccountRepository.GetByUserId("2", ct).Returns(account);
 
-            var result = await _accountService.GetAccountById(2, ct);
+            var result = await _accountService.GetAccountById("2", ct);
 
             Assert.Multiple(() =>
             {
@@ -84,9 +84,9 @@ namespace ReptileTrackerTests.Account.Service
 
             var ct = new CancellationToken();
 
-            _mockedAccountRepository.GetByIdAsync(3, ct).Returns(account);
+            _mockedAccountRepository.GetByUserId("3", ct).Returns(account);
 
-            var result = await _accountService.GetAccountById(3, ct);
+            var result = await _accountService.GetAccountById("3", ct);
 
             Assert.Multiple(() =>
             {
@@ -106,9 +106,9 @@ namespace ReptileTrackerTests.Account.Service
                 UserName = "jane@doe.com"
             };
             var ct = new CancellationToken();
-            _mockedAccountRepository.GetByIdAsync(4, ct).Returns(account);
+            _mockedAccountRepository.GetByUserId("4", ct).Returns(account);
 
-            var result = await _accountService.GetAccountById(4, ct);
+            var result = await _accountService.GetAccountById("4", ct);
 
             Assert.Multiple(() =>
             {
@@ -121,7 +121,7 @@ namespace ReptileTrackerTests.Account.Service
         [Test]
         public async Task WhenIncorrectAccountIdIsGiven_ReturnErrorResponse()
         {
-            var result = await _accountService.GetAccountById(11, new CancellationToken());
+            var result = await _accountService.GetAccountById("11", new CancellationToken());
 
             Assert.Multiple(() =>
             {

@@ -11,9 +11,9 @@ namespace ReptileTracker.Account.Service
 {
     public class AccountService(IAccountRepository accountRepository) : IAccountService
     {
-        public async Task<Result<AccountDTO>> GetAccountById(int accountId, CancellationToken ct)
+        public async Task<Result<AccountDTO>> GetAccountById(string accountId, CancellationToken ct)
         {
-            var entity = await accountRepository.GetByIdAsync(accountId, ct);
+            var entity = await accountRepository.GetByUserId(accountId, ct);
             if (entity == null)
             {
                 return Result<AccountDTO>.Failure(AccountErrors.NotFound);

@@ -17,6 +17,7 @@ using ReptileTracker.Shedding.Model;
 using ReptileTracker.Shedding.Service;
 using Serilog;
 using ReptileTracker.Extensions;
+using ReptileTracker.Account.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,8 @@ builder.Services.AddScoped<ISheddingRepository, SheddingRepository>();
 builder.Services.AddScoped<ISheddingService, SheddingService>();
 builder.Services.AddScoped<ILengthService, LengthService>();
 builder.Services.AddScoped<IWeightService, WeightService>();
-builder.Services.AddScoped<IReptileService, ReptileService>();
+builder.Services.AddScoped<IReptileService, ReptileService>(); 
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped(typeof(IGenericRepository<Weight>), typeof(GenericRepository<Weight>));
 builder.Services.AddScoped(typeof(IGenericRepository<Length>), typeof(GenericRepository<Length>));
 builder.Services.AddScoped(typeof(IGenericRepository<Reptile>), typeof(GenericRepository<Reptile>));
