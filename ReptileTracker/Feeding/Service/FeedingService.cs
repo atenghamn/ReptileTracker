@@ -8,7 +8,6 @@ using ReptileTracker.Feeding.Errors;
 using ReptileTracker.Feeding.Model;
 using ReptileTracker.Infrastructure.Persistence;
 using Serilog;
-using Serilog.Core;
 
 namespace ReptileTracker.Feeding.Service;
 
